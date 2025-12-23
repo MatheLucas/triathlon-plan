@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Triathlon Trainingsplan – Sprint</title>
+  <style>
+    :root{
+      --bg:#0b0f14; --text:#e9eef6; --muted:#a8b3c7; --accent:#7dd3fc;
+      --good:#34d399; --warn:#fbbf24; --bad:#fb7185;
+      --line:rgba(255,255,255,.10); --shadow: 0 10px 25px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(125,211,252,.12), transparent 60%),
+        radial-gradient(900px 600px at 90% 10%, rgba(52,211,153,.10), transparent 60%),
+        var(--bg);
+      padding:14px 14px 140px;
+      max-width:980px; margin:0 auto;
+    }
+    header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:4px 0 12px}
+    h1{margin:0;font-size:18px;font-weight:900}
+    .sub{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.4}
+    .pillRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .pill{font-size:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:6px 10px;border-radius:999px}
+    .pill strong{color:var(--accent)}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:860px){.grid{grid-template-columns:1.1fr .9fr}}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
+    }
+    .cardHeader{padding:12px 12px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.12)}
+    .cardHeader h2{margin:0;font-size:14px;font-weight:900}
+    .cardBody{padding:12px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    button{
+      appearance:none; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--text);
+      padding:10px 12px; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer;
+      touch-action:manipulation; -webkit-tap-highlight-color: transparent; user-select:none;
+    }
+    .btnPrimary{background:linear-gradient(180deg, rgba(125,211,252,.22), rgba(125,211,252,.08));border-color:rgba(125,211,252,.35)}
+    .btnWarn{background:linear-gradient(180deg, rgba(251,191,36,.20), rgba(251,191,36,.07));border-color:rgba(251,191,36,.35)}
+    .btnGood{background:linear-gradient(180deg, rgba(52,211,153,.22), rgba(52,211,153,.08));border-color:rgba(52,211,153,.35)}
+    .kicker{font-size:12px;font-weight:900;color:rgba(125,211,252,.95);text-transform:uppercase}
+    .bigDay{font-size:18px;font-weight:950;margin:0}
+    .smallDate{font-size:12px;color:var(--muted);margin:0}
+    .todayTitle{display:flex;flex-direction:column;gap:2px}
+    .section{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.10);margin-bottom:10px}
+    .section h3{margin:0 0 8px;font-size:13px;font-weight:950}
+    .small{font-size:12px;color:var(--muted);line-height:1.35}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+    textarea,input,select{
+      width:100%; background:rgba(0,0,0,.20); border:1px solid var(--line); border-radius:14px;
+      color:var(--text); padding:10px 12px; outline:none; font-size:13px;
+    }
+    textarea{min-height:92px;resize:vertical}
+    .checklist{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+    .checkItem{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04)}
+    .checkItem input{margin-top:3px;transform:scale(1.15)}
+    .t{font-weight:950;font-size:13px;margin:0}
+    .d{margin:2px 0 0;font-size:12px;color:var(--muted);white-space:pre-wrap}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;font-weight:950;cursor:pointer}
+    .tab.active{background:rgba(125,211,252,.16);border-color:rgba(125,211,252,.35)}
+    .weekTable{width:100%;border-collapse:separate;border-spacing:0;border-radius:16px;border:1px solid var(--line);overflow:hidden}
+    .weekTable th,.weekTable td{padding:10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);font-size:12px;white-space:pre-wrap}
+    .weekTable th{background:rgba(255,255,255,.06);font-weight:950}
+    .weekTable tr:last-child td{border-bottom:none}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(0,0,0,.12);font-size:12px;font-weight:950}
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--accent)}
+    .dot.good{background:var(--good)} .dot.warn{background:var(--warn)} .dot.bad{background:var(--bad)}
+    .footerBar{
+      position:fixed;left:0;right:0;bottom:0;
+      background:rgba(10,14,20,.82);
+      border-top:1px solid var(--line);
+      padding:10px 14px;
+      display:flex;justify-content:center;z-index:50
+    }
+    .footerBar .inner{width:min(980px,100%);display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .tiny{font-size:11px;color:var(--muted)}
+    .banner{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      border-radius:14px;
+      padding:10px 12px;
+      margin: 0 0 12px;
+    }
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+  </style>
+</head>
+<body>
+
+<div class="banner">
+  <div style="font-weight:950">Status</div>
+  <div class="small mono" id="statusLine">JS lädt…</div>
+  <div class="small" id="errorLine" style="margin-top:6px"></div>
+</div>
+
+<header>
+  <div>
+    <h1>Triathlon Trainingsplan – Sprint</h1>
+    <p class="sub">Wenn die Buttons reagieren, siehst du oben „JS aktiv ✅“</p>
+    <div class="pillRow">
+      <div class="pill"><strong>Swim GA1:</strong> 1:38–1:43/100 m</div>
+      <div class="pill"><strong>Bike GA1:</strong> 130–165 W</div>
+      <div class="pill"><strong>Run Easy:</strong> 5:55–6:20/km</div>
+      <div class="pill"><strong>Knie:</strong> keine Sprints · bergab defensiv · Kadenz 165–172</div>
+    </div>
+  </div>
+  <div class="row">
+    <button class="btnPrimary" id="btnToday" type="button">Heute</button>
+    <button id="btnPrev" type="button">←</button>
+    <button id="btnNext" type="button">→</button>
+  </div>
+</header>
+
+<div class="grid">
+  <section class="card">
+    <div class="cardHeader">
+      <div class="todayTitle">
+        <div class="kicker">Heute</div>
+        <p class="bigDay" id="todayDay">—</p>
+        <p class="smallDate" id="todayDate">—</p>
+      </div>
+      <div class="badge"><span class="dot" id="loadDot"></span><span id="loadText">—</span></div>
+    </div>
+
+    <div class="cardBody">
+      <div class="section">
+        <h3>Was steht an?</h3>
+        <div class="small" id="todaySummary">—</div>
+        <div class="divider"></div>
+        <div class="row">
+          <div class="badge">Dauer: <span id="todayDuration">—</span></div>
+          <div class="badge">Fokus: <span id="todayFocus">—</span></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Umplanen (nur dieses Datum)</h3>
+        <div class="small">Restday setzen oder eine andere Einheit anzeigen.</div>
+        <div style="height:10px"></div>
+        <div class="row">
+          <button class="btnWarn" id="btnSetRest" type="button">Heute: Restday</button>
+          <button id="btnClearOverride" type="button">Override löschen</button>
+        </div>
+        <div style="height:10px"></div>
+        <select id="overrideSelect"></select>
+        <div style="height:10px"></div>
+        <div class="row">
+          <button class="btnPrimary" id="btnApplyOverride" type="button">Übernehmen</button>
+          <span class="tiny" id="overrideState">—</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Details / Ablauf</h3>
+        <div id="todayDetails">—</div>
+      </div>
+
+      <div class="section">
+        <h3>Checkliste</h3>
+        <div class="checklist" id="checklist"></div>
+      </div>
+
+      <div class="section">
+        <h3>Notizen</h3>
+        <textarea id="notes" placeholder="Wie war’s? Pace/Watt/Zeiten? Knie (0–10)?"></textarea>
+        <div class="row" style="margin-top:10px">
+          <button class="btnPrimary" id="btnSave" type="button">Speichern</button>
+          <button id="btnClearNotes" type="button">Notiz löschen</button>
+          <span class="tiny" id="saveHint">—</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="card">
+    <div class="cardHeader">
+      <h2>Übersicht</h2>
+      <div class="tabs">
+        <div class="tab active" data-tab="week">Woche</div>
+        <div class="tab" data-tab="swim">Schwimmen</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <div id="tab-week">
+        <table class="weekTable">
+          <thead><tr><th style="width:84px">Tag</th><th>Einheiten</th><th style="width:120px">Dauer</th></tr></thead>
+          <tbody id="weekRows"></tbody>
+        </table>
+      </div>
+
+      <div id="tab-swim" style="display:none">
+        <div class="section">
+          <h3>Mittwoch (55 min)</h3>
+          <ul>
+            <li>300 ein</li><li>6×50 Technik</li><li>4×300 @ 1:38–1:42/100</li><li>6×50 @ 1:30–1:33</li><li>200 aus</li>
+          </ul>
+        </div>
+        <div class="section">
+          <h3>Freitag (55 min)</h3>
+          <ul>
+            <li>300 ein</li><li>4×50 Technik</li><li>5×300 @ 1:38–1:43/100</li><li>6×25 schnell</li><li>200 aus</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="footerBar">
+  <div class="inner">
+    <div class="tiny" id="footerHint">—</div>
+    <div class="row">
+      <button class="btnPrimary" id="btnExport" type="button">Export</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var statusLine = document.getElementById("statusLine");
+  var errorLine = document.getElementById("errorLine");
+
+  window.onerror = function(msg, url, line, col){
+    errorLine.textContent = "JS Fehler: " + msg + " (Zeile " + line + ")";
+    return false;
+  };
+
+  // Storage test
+  var storageOK = true;
+  try{
+    localStorage.setItem("__tri_test__", "1");
+    localStorage.removeItem("__tri_test__");
+  } catch(e){
+    storageOK = false;
+  }
+
+  function pad2(n){ return (n<10 ? "0" : "") + n; }
+  function toISODate(d){
+    return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+  }
+  function addDays(d, n){
+    var x = new Date(d.getTime());
+    x.setDate(x.getDate()+n);
+    return x;
+  }
+  function fmtDate(d){
+    try{
+      return d.toLocaleDateString('de-DE',{weekday:'long',year:'numeric',month:'2-digit',day:'2-digit'});
+    } catch(e){
+      return d.toDateString();
+    }
+  }
+
+  // Plan
+  var days = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
+  var PLAN = {
+    1:{focus:"Regeneration + Kraft",duration:"40–45 min",load:"leicht",summary:"Bodyweight + Mobility.",
+      details:"• Bodyweight 30 min (kontrolliert)\n• Mobility 10–15 min (Bauernfeind)",
+      checklist:[{t:"Kraft 30 min",d:"Kontrolliert."},{t:"Mobility 10–15",d:"Bauernfeind."}]},
+    2:{focus:"Lauf + Core",duration:"70–75 min",load:"moderat",summary:"Lauf easy + Core/Beinachse + Mobility.",
+      details:"• Lauf 30–35 min @ 5:55–6:20 flach, Kadenz 165–172\n• Core/Beinachse 30 min\n• Mobility 10 min",
+      checklist:[{t:"Lauf easy",d:"Flach, kein Tempo."},{t:"Core",d:"Kontrolliert."},{t:"Mobility",d:"Bauernfeind."}]},
+    3:{focus:"Schwimmen + Tennis",duration:"ca. 3 h",load:"hoch",summary:"Schwimmen 55 min + Tennis 2 h.",
+      details:"• Swim: 300 ein, 6×50 Technik, 4×300 @ 1:38–1:42, 6×50 @ 1:30–1:33, 200 aus\n• Tennis 2 h",
+      checklist:[{t:"Schwimmen",d:"Konstanz."},{t:"Tennis",d:"Warm-up."}]},
+    4:{focus:"Rad + Kraft",duration:"90–105 min",load:"moderat",summary:"Rad GA1 + Stabi.",
+      details:"• Rad 60–75 min @ 130–165 W (rpm 85–95)\n• Kraft 30 min (Stabi/Beinachse)",
+      checklist:[{t:"Rad GA1",d:"130–165 W."},{t:"Kraft",d:"Kontrolle."}]},
+    5:{focus:"Schwimmen Key",duration:"55–60 min",load:"moderat",summary:"Key Swim 55 min.",
+      details:"• 300 ein, 4×50 Technik, 5×300 @ 1:38–1:43, 6×25 schnell, 200 aus",
+      checklist:[{t:"Schwimmen Key",d:"300er stabil."}]},
+    6:{focus:"Lange Ausfahrt",duration:"2–3 h (+ 5–10 min)",load:"hoch",summary:"Rad lang GA1, optional Koppellauf.",
+      details:"• Rad 2–3 h @ 130–165 W\n• Optional 5–10 min Koppellauf nur Knie 0–1/10",
+      checklist:[{t:"Rad lang",d:"Gleichmäßig."},{t:"Optional Koppellauf",d:"Nur Knie top."}]},
+    0:{focus:"Lauf + Mobility",duration:"50–60 min",load:"moderat",summary:"Lauf locker + Mobility.",
+      details:"• Lauf 30–35 min @ 5:45–6:10 flach, Kadenz 165–172\n• Mobility 10–15 min",
+      checklist:[{t:"Lauf locker",d:"Flach & easy."},{t:"Mobility",d:"Bauernfeind."}]}
+  };
+
+  function loadLabel(load){
+    if(load.indexOf("leicht")>=0) return {text:"Belastung: leicht", cls:"good"};
+    if(load.indexOf("moderat")>=0) return {text:"Belastung: moderat", cls:"warn"};
+    return {text:"Belastung: hoch", cls:"bad"};
+  }
+
+  function keyFor(iso, suffix){ return "tri_"+iso+"_"+suffix; }
+
+  function getNotes(iso){
+    try{ return localStorage.getItem(keyFor(iso,"notes")) || ""; }catch(e){ return ""; }
+  }
+  function setNotes(iso, v){
+    try{ localStorage.setItem(keyFor(iso,"notes"), v); return true; }catch(e){ return false; }
+  }
+  function getOverride(iso){
+    try{ return localStorage.getItem(keyFor(iso,"override")) || ""; }catch(e){ return ""; }
+  }
+  function setOverride(iso, v){
+    try{ localStorage.setItem(keyFor(iso,"override"), v); return true; }catch(e){ return false; }
+  }
+  function clearOverride(iso){
+    try{ localStorage.removeItem(keyFor(iso,"override")); return true; }catch(e){ return false; }
+  }
+  function getChecks(iso){
+    try{
+      var raw = localStorage.getItem(keyFor(iso,"checks")) || "{}";
+      return JSON.parse(raw);
+    }catch(e){ return {}; }
+  }
+  function setChecks(iso, obj){
+    try{
+      localStorage.setItem(keyFor(iso,"checks"), JSON.stringify(obj));
+      return true;
+    }catch(e){ return false; }
+  }
+
+  var currentDate = new Date();
+
+  function renderWeekTable(){
+    var tbody = document.getElementById("weekRows");
+    tbody.innerHTML = "";
+    var order = [1,2,3,4,5,6,0];
+    var names = {0:"So",1:"Mo",2:"Di",3:"Mi",4:"Do",5:"Fr",6:"Sa"};
+    for(var i=0;i<order.length;i++){
+      var idx = order[i];
+      var p = PLAN[idx];
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td><strong>"+names[idx]+"</strong></td><td>"+p.summary+"</td><td>"+p.duration+"</td>";
+      tbody.appendChild(tr);
+    }
+  }
+
+  function renderOverrideSelect(){
+    var sel = document.getElementById("overrideSelect");
+    sel.innerHTML = "";
+    var opts = [
+      {v:"", label:"— keine Änderung —"},
+      {v:"rest", label:"Restday (kein Sport)"},
+      {v:"1", label:"Montag – Kraft+Mobility"},
+      {v:"2", label:"Dienstag – Lauf+Core+Mobility"},
+      {v:"3", label:"Mittwoch – Swim+Tennis"},
+      {v:"4", label:"Donnerstag – Rad+Kraft"},
+      {v:"5", label:"Freitag – Swim Key"},
+      {v:"6", label:"Samstag – Rad lang"},
+      {v:"0", label:"Sonntag – Lauf+Mobility"}
+    ];
+    for(var i=0;i<opts.length;i++){
+      var op = document.createElement("option");
+      op.value = opts[i].v;
+      op.textContent = opts[i].label;
+      sel.appendChild(op);
+    }
+  }
+
+  function render(){
+    var iso = toISODate(currentDate);
+    var wd = currentDate.getDay();
+
+    var ov = getOverride(iso);
+    var plan = PLAN[wd];
+    var ovText = "Override: keiner";
+
+    if(ov === "rest"){
+      plan = {
+        focus:"Restday", duration:"0–30 min", load:"leicht",
+        summary:"Heute kein Training. Optional Spaziergang + Mobility.",
+        details:"• Optional 20–30 min Spaziergang\n• Optional 10–15 min Mobility",
+        checklist:[{t:"Optional Spaziergang",d:"20–30 min locker."},{t:"Optional Mobility",d:"10–15 min."}]
+      };
+      ovText = "Override: Restday";
+    } else if(ov !== "" && PLAN[parseInt(ov,10)]){
+      plan = PLAN[parseInt(ov,10)];
+      ovText = "Override: anderer Trainingstag";
+    }
+
+    document.getElementById("todayDay").textContent = days[wd];
+    document.getElementById("todayDate").textContent = fmtDate(currentDate);
+    document.getElementById("todaySummary").textContent = plan.summary;
+    document.getElementById("todayDuration").textContent = plan.duration;
+    document.getElementById("todayFocus").textContent = plan.focus;
+
+    var lb = loadLabel(plan.load);
+    document.getElementById("loadText").textContent = lb.text;
+    document.getElementById("loadDot").className = "dot " + lb.cls;
+
+    document.getElementById("todayDetails").innerHTML = "<pre style='margin:0;white-space:pre-wrap;font-family:inherit;color:var(--muted)'>"+plan.details+"</pre>";
+    document.getElementById("overrideState").textContent = ovText;
+
+    var sel = document.getElementById("overrideSelect");
+    sel.value = ov;
+
+    // checklist
+    var checks = getChecks(iso);
+    var list = document.getElementById("checklist");
+    list.innerHTML = "";
+    for(var i=0;i<plan.checklist.length;i++){
+      (function(i){
+        var item = plan.checklist[i];
+        var id = "chk_"+i;
+        var wrap = document.createElement("div");
+        wrap.className = "checkItem";
+        wrap.innerHTML =
+          "<input type='checkbox' "+(checks[id] ? "checked" : "")+" />" +
+          "<div><p class='t'>"+item.t+"</p><p class='d'>"+item.d+"</p></div>";
+        list.appendChild(wrap);
+        var cb = wrap.querySelector("input");
+        cb.addEventListener("change", function(e){
+          var n = getChecks(iso);
+          n[id] = !!cb.checked;
+          setChecks(iso, n);
+          updateFooter();
+        });
+      })(i);
+    }
+
+    document.getElementById("notes").value = getNotes(iso);
+    updateFooter();
+  }
+
+  function updateFooter(){
+    var iso = toISODate(currentDate);
+    var checks = getChecks(iso);
+    var done = 0;
+    for(var k in checks){ if(checks.hasOwnProperty(k) && checks[k]) done++; }
+    document.getElementById("footerHint").textContent = iso + " · erledigt: " + done;
+  }
+
+  // Tabs
+  function setTab(tab){
+    var tabs = document.querySelectorAll(".tab");
+    for(var i=0;i<tabs.length;i++){
+      tabs[i].classList.remove("active");
+      if(tabs[i].getAttribute("data-tab") === tab) tabs[i].classList.add("active");
+    }
+    document.getElementById("tab-week").style.display = (tab==="week") ? "block" : "none";
+    document.getElementById("tab-swim").style.display = (tab==="swim") ? "block" : "none";
+  }
+  var tabEls = document.querySelectorAll(".tab");
+  for(var i=0;i<tabEls.length;i++){
+    tabEls[i].addEventListener("click", (function(el){
+      return function(){ setTab(el.getAttribute("data-tab")); };
+    })(tabEls[i]));
+  }
+
+  // Buttons
+  document.getElementById("btnToday").addEventListener("click", function(){ currentDate = new Date(); render(); });
+  document.getElementById("btnPrev").addEventListener("click", function(){ currentDate = addDays(currentDate,-1); render(); });
+  document.getElementById("btnNext").addEventListener("click", function(){ currentDate = addDays(currentDate, 1); render(); });
+
+  document.getElementById("btnSave").addEventListener("click", function(){
+    var iso = toISODate(currentDate);
+    var ok = setNotes(iso, document.getElementById("notes").value);
+    document.getElementById("saveHint").textContent = ok ? "Gespeichert ✅" : "Speichern blockiert ❌";
+  });
+  document.getElementById("btnClearNotes").addEventListener("click", function(){
+    var iso = toISODate(currentDate);
+    setNotes(iso, "");
+    document.getElementById("notes").value 
