@@ -4,11 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Triathlon Trainingsplan – Sprint</title>
+  <meta name="theme-color" content="#0b0f14" />
   <style>
     :root{
       --bg:#0b0f14; --text:#e9eef6; --muted:#a8b3c7; --accent:#7dd3fc;
       --good:#34d399; --warn:#fbbf24; --bad:#fb7185;
-      --line:rgba(255,255,255,.10); --shadow: 0 10px 25px rgba(0,0,0,.35);
+      --line:rgba(255,255,255,.10); --shadow:0 10px 25px rgba(0,0,0,.35);
       --radius:18px;
     }
     *{box-sizing:border-box}
@@ -42,10 +43,13 @@
       appearance:none; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--text);
       padding:10px 12px; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer;
       touch-action:manipulation; -webkit-tap-highlight-color: transparent; user-select:none;
+      transition:.12s transform ease;
     }
+    button:active{transform:scale(.98)}
     .btnPrimary{background:linear-gradient(180deg, rgba(125,211,252,.22), rgba(125,211,252,.08));border-color:rgba(125,211,252,.35)}
     .btnWarn{background:linear-gradient(180deg, rgba(251,191,36,.20), rgba(251,191,36,.07));border-color:rgba(251,191,36,.35)}
     .btnGood{background:linear-gradient(180deg, rgba(52,211,153,.22), rgba(52,211,153,.08));border-color:rgba(52,211,153,.35)}
+    .btnBad{background:linear-gradient(180deg, rgba(251,113,133,.22), rgba(251,113,133,.08));border-color:rgba(251,113,133,.35)}
     .kicker{font-size:12px;font-weight:900;color:rgba(125,211,252,.95);text-transform:uppercase}
     .bigDay{font-size:18px;font-weight:950;margin:0}
     .smallDate{font-size:12px;color:var(--muted);margin:0}
@@ -59,6 +63,8 @@
       color:var(--text); padding:10px 12px; outline:none; font-size:13px;
     }
     textarea{min-height:92px;resize:vertical}
+    ul{margin:8px 0 0 18px;padding:0;line-height:1.35}
+    li{margin:5px 0}
     .checklist{display:flex;flex-direction:column;gap:8px;margin-top:10px}
     .checkItem{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04)}
     .checkItem input{margin-top:3px;transform:scale(1.15)}
@@ -76,13 +82,14 @@
     .dot.good{background:var(--good)} .dot.warn{background:var(--warn)} .dot.bad{background:var(--bad)}
     .footerBar{
       position:fixed;left:0;right:0;bottom:0;
-      background:rgba(10,14,20,.82);
+      background:rgba(10,14,20,.82); backdrop-filter: blur(12px);
       border-top:1px solid var(--line);
-      padding:10px 14px;
+      padding:10px 14px calc(10px + env(safe-area-inset-bottom));
       display:flex;justify-content:center;z-index:50
     }
     .footerBar .inner{width:min(980px,100%);display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
     .tiny{font-size:11px;color:var(--muted)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
     .banner{
       border:1px solid var(--line);
       background:rgba(255,255,255,.05);
@@ -90,21 +97,31 @@
       padding:10px 12px;
       margin: 0 0 12px;
     }
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    .statusOk{color:var(--good);font-weight:900}
+    .statusBad{color:var(--bad);font-weight:900}
+    .statusWarn{color:var(--warn);font-weight:900}
+    pre{margin:0;white-space:pre-wrap;font-family:inherit;color:var(--muted)}
   </style>
 </head>
 <body>
 
 <div class="banner">
-  <div style="font-weight:950">Status</div>
-  <div class="small mono" id="statusLine">JS lädt…</div>
+  <div class="row" style="justify-content:space-between">
+    <div>
+      <div style="font-weight:950">Status</div>
+      <div class="small mono" id="statusLine">JS lädt…</div>
+    </div>
+    <div class="row">
+      <button class="btnPrimary" id="btnReload" type="button">Neu laden</button>
+    </div>
+  </div>
   <div class="small" id="errorLine" style="margin-top:6px"></div>
 </div>
 
 <header>
   <div>
     <h1>Triathlon Trainingsplan – Sprint</h1>
-    <p class="sub">Wenn die Buttons reagieren, siehst du oben „JS aktiv ✅“</p>
+    <p class="sub">Klickbar + speicherbar auf Android/iPad/PC. Umplanen pro Datum möglich.</p>
     <div class="pillRow">
       <div class="pill"><strong>Swim GA1:</strong> 1:38–1:43/100 m</div>
       <div class="pill"><strong>Bike GA1:</strong> 130–165 W</div>
@@ -200,13 +217,21 @@
         <div class="section">
           <h3>Mittwoch (55 min)</h3>
           <ul>
-            <li>300 ein</li><li>6×50 Technik</li><li>4×300 @ 1:38–1:42/100</li><li>6×50 @ 1:30–1:33</li><li>200 aus</li>
+            <li>300 ein (locker, Fokus Wasserlage)</li>
+            <li>6×50 Technik (je 25 Drill + 25 Swim), 15–20s Pause</li>
+            <li>4×300 @ 1:38–1:42/100 m, 25–40s Pause</li>
+            <li>6×50 zügig @ ~1:30–1:33/100 m, 20s Pause</li>
+            <li>200 aus</li>
           </ul>
         </div>
         <div class="section">
           <h3>Freitag (55 min)</h3>
           <ul>
-            <li>300 ein</li><li>4×50 Technik</li><li>5×300 @ 1:38–1:43/100</li><li>6×25 schnell</li><li>200 aus</li>
+            <li>300 ein</li>
+            <li>4×50 Technik, 15–20s Pause</li>
+            <li>5×300 @ 1:38–1:43/100 m, 25–45s Pause</li>
+            <li>6×25 schnell (sauber!), 20–30s Pause</li>
+            <li>200 aus</li>
           </ul>
         </div>
       </div>
@@ -225,23 +250,12 @@
 
 <script>
 (function(){
-  var statusLine = document.getElementById("statusLine");
-  var errorLine = document.getElementById("errorLine");
+  "use strict";
 
-  window.onerror = function(msg, url, line, col){
-    errorLine.textContent = "JS Fehler: " + msg + " (Zeile " + line + ")";
-    return false;
-  };
-
-  // Storage test
-  var storageOK = true;
-  try{
-    localStorage.setItem("__tri_test__", "1");
-    localStorage.removeItem("__tri_test__");
-  } catch(e){
-    storageOK = false;
-  }
-
+  // ---------- helpers (safe) ----------
+  function $(id){ return document.getElementById(id); }
+  function safeText(el, txt){ if(el) el.textContent = txt; }
+  function safeHTML(el, html){ if(el) el.innerHTML = html; }
   function pad2(n){ return (n<10 ? "0" : "") + n; }
   function toISODate(d){
     return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
@@ -253,213 +267,348 @@
   }
   function fmtDate(d){
     try{
-      return d.toLocaleDateString('de-DE',{weekday:'long',year:'numeric',month:'2-digit',day:'2-digit'});
-    } catch(e){
+      return d.toLocaleDateString("de-DE",{weekday:"long",year:"numeric",month:"2-digit",day:"2-digit"});
+    }catch(e){
       return d.toDateString();
     }
   }
-
-  // Plan
-  var days = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
-  var PLAN = {
-    1:{focus:"Regeneration + Kraft",duration:"40–45 min",load:"leicht",summary:"Bodyweight + Mobility.",
-      details:"• Bodyweight 30 min (kontrolliert)\n• Mobility 10–15 min (Bauernfeind)",
-      checklist:[{t:"Kraft 30 min",d:"Kontrolliert."},{t:"Mobility 10–15",d:"Bauernfeind."}]},
-    2:{focus:"Lauf + Core",duration:"70–75 min",load:"moderat",summary:"Lauf easy + Core/Beinachse + Mobility.",
-      details:"• Lauf 30–35 min @ 5:55–6:20 flach, Kadenz 165–172\n• Core/Beinachse 30 min\n• Mobility 10 min",
-      checklist:[{t:"Lauf easy",d:"Flach, kein Tempo."},{t:"Core",d:"Kontrolliert."},{t:"Mobility",d:"Bauernfeind."}]},
-    3:{focus:"Schwimmen + Tennis",duration:"ca. 3 h",load:"hoch",summary:"Schwimmen 55 min + Tennis 2 h.",
-      details:"• Swim: 300 ein, 6×50 Technik, 4×300 @ 1:38–1:42, 6×50 @ 1:30–1:33, 200 aus\n• Tennis 2 h",
-      checklist:[{t:"Schwimmen",d:"Konstanz."},{t:"Tennis",d:"Warm-up."}]},
-    4:{focus:"Rad + Kraft",duration:"90–105 min",load:"moderat",summary:"Rad GA1 + Stabi.",
-      details:"• Rad 60–75 min @ 130–165 W (rpm 85–95)\n• Kraft 30 min (Stabi/Beinachse)",
-      checklist:[{t:"Rad GA1",d:"130–165 W."},{t:"Kraft",d:"Kontrolle."}]},
-    5:{focus:"Schwimmen Key",duration:"55–60 min",load:"moderat",summary:"Key Swim 55 min.",
-      details:"• 300 ein, 4×50 Technik, 5×300 @ 1:38–1:43, 6×25 schnell, 200 aus",
-      checklist:[{t:"Schwimmen Key",d:"300er stabil."}]},
-    6:{focus:"Lange Ausfahrt",duration:"2–3 h (+ 5–10 min)",load:"hoch",summary:"Rad lang GA1, optional Koppellauf.",
-      details:"• Rad 2–3 h @ 130–165 W\n• Optional 5–10 min Koppellauf nur Knie 0–1/10",
-      checklist:[{t:"Rad lang",d:"Gleichmäßig."},{t:"Optional Koppellauf",d:"Nur Knie top."}]},
-    0:{focus:"Lauf + Mobility",duration:"50–60 min",load:"moderat",summary:"Lauf locker + Mobility.",
-      details:"• Lauf 30–35 min @ 5:45–6:10 flach, Kadenz 165–172\n• Mobility 10–15 min",
-      checklist:[{t:"Lauf locker",d:"Flach & easy."},{t:"Mobility",d:"Bauernfeind."}]}
-  };
-
   function loadLabel(load){
-    if(load.indexOf("leicht")>=0) return {text:"Belastung: leicht", cls:"good"};
-    if(load.indexOf("moderat")>=0) return {text:"Belastung: moderat", cls:"warn"};
+    if((load||"").indexOf("leicht")>=0) return {text:"Belastung: leicht", cls:"good"};
+    if((load||"").indexOf("moderat")>=0) return {text:"Belastung: moderat", cls:"warn"};
     return {text:"Belastung: hoch", cls:"bad"};
   }
 
-  function keyFor(iso, suffix){ return "tri_"+iso+"_"+suffix; }
+  // ---------- hard error handling ----------
+  var statusLine = $("statusLine");
+  var errorLine  = $("errorLine");
 
-  function getNotes(iso){
-    try{ return localStorage.getItem(keyFor(iso,"notes")) || ""; }catch(e){ return ""; }
+  function setStatusOK(msg){
+    safeHTML(statusLine, '<span class="statusOk">'+msg+'</span>');
   }
-  function setNotes(iso, v){
-    try{ localStorage.setItem(keyFor(iso,"notes"), v); return true; }catch(e){ return false; }
+  function setStatusWARN(msg){
+    safeHTML(statusLine, '<span class="statusWarn">'+msg+'</span>');
   }
-  function getOverride(iso){
-    try{ return localStorage.getItem(keyFor(iso,"override")) || ""; }catch(e){ return ""; }
-  }
-  function setOverride(iso, v){
-    try{ localStorage.setItem(keyFor(iso,"override"), v); return true; }catch(e){ return false; }
-  }
-  function clearOverride(iso){
-    try{ localStorage.removeItem(keyFor(iso,"override")); return true; }catch(e){ return false; }
-  }
-  function getChecks(iso){
-    try{
-      var raw = localStorage.getItem(keyFor(iso,"checks")) || "{}";
-      return JSON.parse(raw);
-    }catch(e){ return {}; }
-  }
-  function setChecks(iso, obj){
-    try{
-      localStorage.setItem(keyFor(iso,"checks"), JSON.stringify(obj));
-      return true;
-    }catch(e){ return false; }
+  function setStatusBAD(msg){
+    safeHTML(statusLine, '<span class="statusBad">'+msg+'</span>');
   }
 
-  var currentDate = new Date();
+  window.onerror = function(msg, url, line, col, err){
+    safeText(errorLine, "JS Fehler: " + msg + (line ? (" (Zeile " + line + ")") : ""));
+    setStatusBAD("JS Fehler ❌ – siehe Meldung");
+    return false;
+  };
+  window.onunhandledrejection = function(e){
+    safeText(errorLine, "JS Promise-Fehler: " + (e && e.reason ? (e.reason.message || String(e.reason)) : "unknown"));
+    setStatusBAD("JS Fehler ❌ – siehe Meldung");
+  };
 
-  function renderWeekTable(){
-    var tbody = document.getElementById("weekRows");
-    tbody.innerHTML = "";
-    var order = [1,2,3,4,5,6,0];
-    var names = {0:"So",1:"Mo",2:"Di",3:"Mi",4:"Do",5:"Fr",6:"Sa"};
-    for(var i=0;i<order.length;i++){
-      var idx = order[i];
-      var p = PLAN[idx];
-      var tr = document.createElement("tr");
-      tr.innerHTML = "<td><strong>"+names[idx]+"</strong></td><td>"+p.summary+"</td><td>"+p.duration+"</td>";
-      tbody.appendChild(tr);
+  // ---------- run after DOM ready ----------
+  function onReady(fn){
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", fn);
+    } else {
+      fn();
     }
   }
 
-  function renderOverrideSelect(){
-    var sel = document.getElementById("overrideSelect");
-    sel.innerHTML = "";
-    var opts = [
-      {v:"", label:"— keine Änderung —"},
-      {v:"rest", label:"Restday (kein Sport)"},
-      {v:"1", label:"Montag – Kraft+Mobility"},
-      {v:"2", label:"Dienstag – Lauf+Core+Mobility"},
-      {v:"3", label:"Mittwoch – Swim+Tennis"},
-      {v:"4", label:"Donnerstag – Rad+Kraft"},
-      {v:"5", label:"Freitag – Swim Key"},
-      {v:"6", label:"Samstag – Rad lang"},
-      {v:"0", label:"Sonntag – Lauf+Mobility"}
+  onReady(function(){
+    // verify all required elements exist (prevents silent death)
+    var requiredIds = [
+      "btnReload","btnToday","btnPrev","btnNext","btnSetRest","btnClearOverride","btnApplyOverride",
+      "overrideSelect","todayDay","todayDate","todaySummary","todayDuration","todayFocus",
+      "loadDot","loadText","todayDetails","checklist","notes","btnSave","btnClearNotes",
+      "saveHint","weekRows","footerHint","btnExport","tab-week","tab-swim"
     ];
-    for(var i=0;i<opts.length;i++){
-      var op = document.createElement("option");
-      op.value = opts[i].v;
-      op.textContent = opts[i].label;
-      sel.appendChild(op);
-    }
-  }
-
-  function render(){
-    var iso = toISODate(currentDate);
-    var wd = currentDate.getDay();
-
-    var ov = getOverride(iso);
-    var plan = PLAN[wd];
-    var ovText = "Override: keiner";
-
-    if(ov === "rest"){
-      plan = {
-        focus:"Restday", duration:"0–30 min", load:"leicht",
-        summary:"Heute kein Training. Optional Spaziergang + Mobility.",
-        details:"• Optional 20–30 min Spaziergang\n• Optional 10–15 min Mobility",
-        checklist:[{t:"Optional Spaziergang",d:"20–30 min locker."},{t:"Optional Mobility",d:"10–15 min."}]
-      };
-      ovText = "Override: Restday";
-    } else if(ov !== "" && PLAN[parseInt(ov,10)]){
-      plan = PLAN[parseInt(ov,10)];
-      ovText = "Override: anderer Trainingstag";
+    for(var i=0;i<requiredIds.length;i++){
+      if(!$(requiredIds[i])){
+        safeText(errorLine, "Fehlendes Element im HTML: #" + requiredIds[i] + " (bitte kompletten Code kopieren)");
+        setStatusBAD("JS Fehler ❌ – HTML unvollständig");
+        return;
+      }
     }
 
-    document.getElementById("todayDay").textContent = days[wd];
-    document.getElementById("todayDate").textContent = fmtDate(currentDate);
-    document.getElementById("todaySummary").textContent = plan.summary;
-    document.getElementById("todayDuration").textContent = plan.duration;
-    document.getElementById("todayFocus").textContent = plan.focus;
+    // ---------- storage test ----------
+    var storageOK = true;
+    try{
+      localStorage.setItem("__tri_test__", "1");
+      localStorage.removeItem("__tri_test__");
+    }catch(e){
+      storageOK = false;
+    }
 
-    var lb = loadLabel(plan.load);
-    document.getElementById("loadText").textContent = lb.text;
-    document.getElementById("loadDot").className = "dot " + lb.cls;
+    if(storageOK){
+      setStatusOK("JS aktiv ✅ | Speicher bereit ✅");
+      safeText(errorLine, "");
+    } else {
+      setStatusWARN("JS aktiv ✅ | Speicher blockiert ⚠️ (Notizen bleiben ggf. nicht)");
+      safeText(errorLine, "Hinweis: Dein Browser blockiert localStorage. Wenn Notizen nicht bleiben: Chrome Cache löschen oder anderen Browser testen.");
+    }
 
-    document.getElementById("todayDetails").innerHTML = "<pre style='margin:0;white-space:pre-wrap;font-family:inherit;color:var(--muted)'>"+plan.details+"</pre>";
-    document.getElementById("overrideState").textContent = ovText;
+    // ---------- plan data ----------
+    var days = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
+    var PLAN = {
+      1:{focus:"Regeneration + Kraft",duration:"40–45 min",load:"leicht",summary:"Bodyweight + Mobility.",
+        details:"• Bodyweight 30 min (kontrolliert)\n• Mobility 10–15 min (Bauernfeind)",
+        checklist:[{t:"Kraft 30 min",d:"Kontrolliert."},{t:"Mobility 10–15",d:"Bauernfeind."}]},
+      2:{focus:"Lauf + Core",duration:"70–75 min",load:"moderat",summary:"Lauf easy + Core/Beinachse + Mobility.",
+        details:"• Lauf 30–35 min @ 5:55–6:20 flach, Kadenz 165–172\n• Core/Beinachse 30 min\n• Mobility 10 min",
+        checklist:[{t:"Lauf easy",d:"Flach, kein Tempo."},{t:"Core",d:"Kontrolliert."},{t:"Mobility",d:"Bauernfeind."}]},
+      3:{focus:"Schwimmen + Tennis",duration:"ca. 3 h",load:"hoch",summary:"Schwimmen 55 min + Tennis 2 h.",
+        details:"• Swim: 300 ein, 6×50 Technik, 4×300 @ 1:38–1:42, 6×50 @ 1:30–1:33, 200 aus\n• Tennis 2 h",
+        checklist:[{t:"Schwimmen",d:"Konstanz."},{t:"Tennis",d:"Warm-up."}]},
+      4:{focus:"Rad + Kraft",duration:"90–105 min",load:"moderat",summary:"Rad GA1 + Stabi.",
+        details:"• Rad 60–75 min @ 130–165 W (rpm 85–95)\n• Kraft 30 min (Stabi/Beinachse)",
+        checklist:[{t:"Rad GA1",d:"130–165 W."},{t:"Kraft",d:"Kontrolle."}]},
+      5:{focus:"Schwimmen Key",duration:"55–60 min",load:"moderat",summary:"Key Swim 55 min.",
+        details:"• 300 ein, 4×50 Technik, 5×300 @ 1:38–1:43, 6×25 schnell, 200 aus",
+        checklist:[{t:"Schwimmen Key",d:"300er stabil."}]},
+      6:{focus:"Lange Ausfahrt",duration:"2–3 h (+ 5–10 min)",load:"hoch",summary:"Rad lang GA1, optional Koppellauf.",
+        details:"• Rad 2–3 h @ 130–165 W\n• Optional 5–10 min Koppellauf nur Knie 0–1/10",
+        checklist:[{t:"Rad lang",d:"Gleichmäßig."},{t:"Optional Koppellauf",d:"Nur Knie top."}]},
+      0:{focus:"Lauf + Mobility",duration:"50–60 min",load:"moderat",summary:"Lauf locker + Mobility.",
+        details:"• Lauf 30–35 min @ 5:45–6:10 flach, Kadenz 165–172\n• Mobility 10–15 min",
+        checklist:[{t:"Lauf locker",d:"Flach & easy."},{t:"Mobility",d:"Bauernfeind."}]}
+    };
 
-    var sel = document.getElementById("overrideSelect");
-    sel.value = ov;
+    // ---------- persistence ----------
+    function keyFor(iso, suffix){ return "tri_"+iso+"_"+suffix; }
+    function getLS(k){
+      if(!storageOK) return null;
+      try{ return localStorage.getItem(k); }catch(e){ return null; }
+    }
+    function setLS(k,v){
+      if(!storageOK) return false;
+      try{ localStorage.setItem(k, v); return true; }catch(e){ return false; }
+    }
+    function delLS(k){
+      if(!storageOK) return false;
+      try{ localStorage.removeItem(k); return true; }catch(e){ return false; }
+    }
+    function getNotes(iso){ return getLS(keyFor(iso,"notes")) || ""; }
+    function setNotes(iso, v){ return setLS(keyFor(iso,"notes"), v); }
+    function getOverride(iso){ return getLS(keyFor(iso,"override")) || ""; }
+    function setOverride(iso, v){ return setLS(keyFor(iso,"override"), v); }
+    function clearOverride(iso){ return delLS(keyFor(iso,"override")); }
+    function getChecks(iso){
+      var raw = getLS(keyFor(iso,"checks")) || "{}";
+      try{ return JSON.parse(raw); }catch(e){ return {}; }
+    }
+    function setChecks(iso, obj){
+      return setLS(keyFor(iso,"checks"), JSON.stringify(obj));
+    }
 
-    // checklist
-    var checks = getChecks(iso);
-    var list = document.getElementById("checklist");
-    list.innerHTML = "";
-    for(var i=0;i<plan.checklist.length;i++){
-      (function(i){
-        var item = plan.checklist[i];
-        var id = "chk_"+i;
-        var wrap = document.createElement("div");
-        wrap.className = "checkItem";
-        wrap.innerHTML =
-          "<input type='checkbox' "+(checks[id] ? "checked" : "")+" />" +
-          "<div><p class='t'>"+item.t+"</p><p class='d'>"+item.d+"</p></div>";
-        list.appendChild(wrap);
-        var cb = wrap.querySelector("input");
-        cb.addEventListener("change", function(e){
-          var n = getChecks(iso);
-          n[id] = !!cb.checked;
-          setChecks(iso, n);
-          updateFooter();
+    // ---------- UI rendering ----------
+    var currentDate = new Date();
+
+    function renderWeekTable(){
+      var tbody = $("weekRows");
+      tbody.innerHTML = "";
+      var order = [1,2,3,4,5,6,0];
+      var names = {0:"So",1:"Mo",2:"Di",3:"Mi",4:"Do",5:"Fr",6:"Sa"};
+      for(var i=0;i<order.length;i++){
+        var idx = order[i];
+        var p = PLAN[idx];
+        var tr = document.createElement("tr");
+        tr.innerHTML = "<td><strong>"+names[idx]+"</strong></td><td>"+p.summary+"</td><td>"+p.duration+"</td>";
+        tbody.appendChild(tr);
+      }
+    }
+
+    function renderOverrideSelect(){
+      var sel = $("overrideSelect");
+      sel.innerHTML = "";
+      var opts = [
+        {v:"", label:"— keine Änderung —"},
+        {v:"rest", label:"Restday (kein Sport)"},
+        {v:"1", label:"Montag – Kraft+Mobility"},
+        {v:"2", label:"Dienstag – Lauf+Core+Mobility"},
+        {v:"3", label:"Mittwoch – Swim+Tennis"},
+        {v:"4", label:"Donnerstag – Rad+Kraft"},
+        {v:"5", label:"Freitag – Swim Key"},
+        {v:"6", label:"Samstag – Rad lang"},
+        {v:"0", label:"Sonntag – Lauf+Mobility"}
+      ];
+      for(var i=0;i<opts.length;i++){
+        var op = document.createElement("option");
+        op.value = opts[i].v;
+        op.textContent = opts[i].label;
+        sel.appendChild(op);
+      }
+    }
+
+    function updateFooter(){
+      var iso = toISODate(currentDate);
+      var checks = getChecks(iso);
+      var done = 0;
+      for(var k in checks){ if(Object.prototype.hasOwnProperty.call(checks,k) && checks[k]) done++; }
+      safeText($("footerHint"), iso + " · erledigt: " + done);
+    }
+
+    function render(){
+      var iso = toISODate(currentDate);
+      var wd = currentDate.getDay();
+
+      var ov = getOverride(iso);
+      var plan = PLAN[wd];
+      var ovText = "Override: keiner";
+
+      if(ov === "rest"){
+        plan = {
+          focus:"Restday", duration:"0–30 min", load:"leicht",
+          summary:"Heute kein Training. Optional Spaziergang + Mobility.",
+          details:"• Optional 20–30 min Spaziergang\n• Optional 10–15 min Mobility",
+          checklist:[{t:"Optional Spaziergang",d:"20–30 min locker."},{t:"Optional Mobility",d:"10–15 min."}]
+        };
+        ovText = "Override: Restday";
+      } else if(ov !== "" && PLAN[parseInt(ov,10)]){
+        plan = PLAN[parseInt(ov,10)];
+        ovText = "Override: anderer Trainingstag";
+      }
+
+      safeText($("todayDay"), days[wd]);
+      safeText($("todayDate"), fmtDate(currentDate));
+      safeText($("todaySummary"), plan.summary);
+      safeText($("todayDuration"), plan.duration);
+      safeText($("todayFocus"), plan.focus);
+
+      var lb = loadLabel(plan.load);
+      safeText($("loadText"), lb.text);
+      $("loadDot").className = "dot " + lb.cls;
+
+      safeHTML($("todayDetails"), "<pre>"+plan.details+"</pre>");
+      safeText($("overrideState"), ovText);
+      $("overrideSelect").value = ov;
+
+      // checklist
+      var list = $("checklist");
+      list.innerHTML = "";
+      var checks = getChecks(iso);
+
+      for(var i=0;i<plan.checklist.length;i++){
+        (function(i){
+          var item = plan.checklist[i];
+          var id = "chk_"+i;
+          var wrap = document.createElement("div");
+          wrap.className = "checkItem";
+          wrap.innerHTML =
+            "<input type='checkbox' "+(checks[id] ? "checked" : "")+" />" +
+            "<div><p class='t'>"+item.t+"</p><p class='d'>"+item.d+"</p></div>";
+          list.appendChild(wrap);
+
+          var cb = wrap.querySelector("input");
+          cb.addEventListener("change", function(){
+            var n = getChecks(iso);
+            n[id] = !!cb.checked;
+            setChecks(iso, n);
+            updateFooter();
+          });
+        })(i);
+      }
+
+      $("notes").value = getNotes(iso);
+      safeText($("saveHint"), storageOK ? "Bereit" : "Speichern evtl. blockiert");
+      updateFooter();
+    }
+
+    // ---------- tabs ----------
+    function setTab(tab){
+      var tabs = document.querySelectorAll(".tab");
+      for(var i=0;i<tabs.length;i++){
+        tabs[i].classList.remove("active");
+        if(tabs[i].getAttribute("data-tab") === tab) tabs[i].classList.add("active");
+      }
+      $("tab-week").style.display = (tab==="week") ? "block" : "none";
+      $("tab-swim").style.display = (tab==="swim") ? "block" : "none";
+    }
+    var tabEls = document.querySelectorAll(".tab");
+    for(var i=0;i<tabEls.length;i++){
+      (function(el){
+        el.addEventListener("click", function(){
+          setTab(el.getAttribute("data-tab"));
         });
-      })(i);
+      })(tabEls[i]);
     }
 
-    document.getElementById("notes").value = getNotes(iso);
-    updateFooter();
-  }
+    // ---------- button bindings (explicit + safe) ----------
+    $("btnReload").addEventListener("click", function(){ location.reload(); });
 
-  function updateFooter(){
-    var iso = toISODate(currentDate);
-    var checks = getChecks(iso);
-    var done = 0;
-    for(var k in checks){ if(checks.hasOwnProperty(k) && checks[k]) done++; }
-    document.getElementById("footerHint").textContent = iso + " · erledigt: " + done;
-  }
+    $("btnToday").addEventListener("click", function(){
+      currentDate = new Date();
+      render();
+    });
+    $("btnPrev").addEventListener("click", function(){
+      currentDate = addDays(currentDate, -1);
+      render();
+    });
+    $("btnNext").addEventListener("click", function(){
+      currentDate = addDays(currentDate, 1);
+      render();
+    });
 
-  // Tabs
-  function setTab(tab){
-    var tabs = document.querySelectorAll(".tab");
-    for(var i=0;i<tabs.length;i++){
-      tabs[i].classList.remove("active");
-      if(tabs[i].getAttribute("data-tab") === tab) tabs[i].classList.add("active");
-    }
-    document.getElementById("tab-week").style.display = (tab==="week") ? "block" : "none";
-    document.getElementById("tab-swim").style.display = (tab==="swim") ? "block" : "none";
-  }
-  var tabEls = document.querySelectorAll(".tab");
-  for(var i=0;i<tabEls.length;i++){
-    tabEls[i].addEventListener("click", (function(el){
-      return function(){ setTab(el.getAttribute("data-tab")); };
-    })(tabEls[i]));
-  }
+    $("btnSave").addEventListener("click", function(){
+      var iso = toISODate(currentDate);
+      var ok = setNotes(iso, $("notes").value);
+      safeText($("saveHint"), ok ? "Gespeichert ✅" : "Speichern blockiert ❌");
+    });
 
-  // Buttons
-  document.getElementById("btnToday").addEventListener("click", function(){ currentDate = new Date(); render(); });
-  document.getElementById("btnPrev").addEventListener("click", function(){ currentDate = addDays(currentDate,-1); render(); });
-  document.getElementById("btnNext").addEventListener("click", function(){ currentDate = addDays(currentDate, 1); render(); });
+    $("btnClearNotes").addEventListener("click", function(){
+      var iso = toISODate(currentDate);
+      setNotes(iso, "");
+      $("notes").value = "";
+      safeText($("saveHint"), "Notiz gelöscht");
+    });
 
-  document.getElementById("btnSave").addEventListener("click", function(){
-    var iso = toISODate(currentDate);
-    var ok = setNotes(iso, document.getElementById("notes").value);
-    document.getElementById("saveHint").textContent = ok ? "Gespeichert ✅" : "Speichern blockiert ❌";
+    $("btnSetRest").addEventListener("click", function(){
+      setOverride(toISODate(currentDate), "rest");
+      render();
+    });
+
+    $("btnClearOverride").addEventListener("click", function(){
+      clearOverride(toISODate(currentDate));
+      render();
+    });
+
+    $("btnApplyOverride").addEventListener("click", function(){
+      var iso = toISODate(currentDate);
+      var v = $("overrideSelect").value;
+      if(v === "") clearOverride(iso);
+      else setOverride(iso, v);
+      render();
+    });
+
+    $("btnExport").addEventListener("click", function(){
+      // Export for last 45 days
+      var out = {};
+      out.generated = new Date().toISOString();
+      out.note = "Triathlon Export (Notizen/Checks/Overrides)";
+
+      var now = new Date();
+      for(var i=0;i<45;i++){
+        var d = addDays(now, -i);
+        var diso = toISODate(d);
+        out["notes_"+diso] = getNotes(diso);
+        out["checks_"+diso] = getChecks(diso);
+        out["override_"+diso] = getOverride(diso);
+      }
+
+      var blob = new Blob([JSON.stringify(out, null, 2)], {type:"application/json"});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "triathlon_notizen_export.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // ---------- init ----------
+    renderWeekTable();
+    renderOverrideSelect();
+    render();
   });
-  document.getElementById("btnClearNotes").addEventListener("click", function(){
-    var iso = toISODate(currentDate);
-    setNotes(iso, "");
-    document.getElementById("notes").value 
+
+})();
+</script>
+</body>
+</html>
