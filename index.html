@@ -20,7 +20,7 @@
         radial-gradient(1200px 800px at 10% 0%, rgba(125,211,252,.12), transparent 60%),
         radial-gradient(900px 600px at 90% 10%, rgba(52,211,153,.10), transparent 60%),
         var(--bg);
-      padding:14px 14px 140px;
+      padding:14px 14px 160px;
       max-width:980px; margin:0 auto;
     }
     header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:4px 0 12px}
@@ -48,8 +48,6 @@
     button:active{transform:scale(.98)}
     .btnPrimary{background:linear-gradient(180deg, rgba(125,211,252,.22), rgba(125,211,252,.08));border-color:rgba(125,211,252,.35)}
     .btnWarn{background:linear-gradient(180deg, rgba(251,191,36,.20), rgba(251,191,36,.07));border-color:rgba(251,191,36,.35)}
-    .btnGood{background:linear-gradient(180deg, rgba(52,211,153,.22), rgba(52,211,153,.08));border-color:rgba(52,211,153,.35)}
-    .btnBad{background:linear-gradient(180deg, rgba(251,113,133,.22), rgba(251,113,133,.08));border-color:rgba(251,113,133,.35)}
     .kicker{font-size:12px;font-weight:900;color:rgba(125,211,252,.95);text-transform:uppercase}
     .bigDay{font-size:18px;font-weight:950;margin:0}
     .smallDate{font-size:12px;color:var(--muted);margin:0}
@@ -58,7 +56,7 @@
     .section h3{margin:0 0 8px;font-size:13px;font-weight:950}
     .small{font-size:12px;color:var(--muted);line-height:1.35}
     .divider{height:1px;background:var(--line);margin:12px 0}
-    textarea,input,select{
+    textarea,select,input{
       width:100%; background:rgba(0,0,0,.20); border:1px solid var(--line); border-radius:14px;
       color:var(--text); padding:10px 12px; outline:none; font-size:13px;
     }
@@ -66,10 +64,16 @@
     ul{margin:8px 0 0 18px;padding:0;line-height:1.35}
     li{margin:5px 0}
     .checklist{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-    .checkItem{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04)}
+    .checkItem{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:10px;border:1px solid var(--line);border-radius:14px;
+      background:rgba(255,255,255,.04)
+    }
     .checkItem input{margin-top:3px;transform:scale(1.15)}
+    .checkMain{flex:1;min-width:0}
     .t{font-weight:950;font-size:13px;margin:0}
     .d{margin:2px 0 0;font-size:12px;color:var(--muted);white-space:pre-wrap}
+    .hintTap{margin-top:6px;font-size:11px;color:rgba(125,211,252,.9);font-weight:900}
     .tabs{display:flex;gap:8px;flex-wrap:wrap}
     .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;font-weight:950;cursor:pointer}
     .tab.active{background:rgba(125,211,252,.16);border-color:rgba(125,211,252,.35)}
@@ -82,7 +86,7 @@
     .dot.good{background:var(--good)} .dot.warn{background:var(--warn)} .dot.bad{background:var(--bad)}
     .footerBar{
       position:fixed;left:0;right:0;bottom:0;
-      background:rgba(10,14,20,.82); backdrop-filter: blur(12px);
+      background:rgba(10,14,20,.86); backdrop-filter: blur(12px);
       border-top:1px solid var(--line);
       padding:10px 14px calc(10px + env(safe-area-inset-bottom));
       display:flex;justify-content:center;z-index:50
@@ -101,6 +105,45 @@
     .statusBad{color:var(--bad);font-weight:900}
     .statusWarn{color:var(--warn);font-weight:900}
     pre{margin:0;white-space:pre-wrap;font-family:inherit;color:var(--muted)}
+    /* ---- Modal ---- */
+    .modalOverlay{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      align-items:center;justify-content:center;
+      padding:16px;
+      z-index:100;
+    }
+    .modal{
+      width:min(880px,100%);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:0 20px 50px rgba(0,0,0,.5);
+      overflow:hidden;
+    }
+    .modalHeader{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
+      padding:12px 12px 10px;
+      border-bottom:1px solid var(--line);
+      background:rgba(0,0,0,.16);
+    }
+    .modalHeader h3{margin:0;font-size:14px;font-weight:950}
+    .modalBody{padding:12px}
+    .modalBody .small{margin-top:6px}
+    .modalClose{min-width:44px}
+    .chipRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .chip{font-size:12px;border:1px solid var(--line);background:rgba(0,0,0,.14);padding:6px 10px;border-radius:999px}
+    .strong{font-weight:950;color:var(--text)}
+    .kbd{font-family:ui-monospace,monospace;border:1px solid var(--line);padding:2px 6px;border-radius:8px;background:rgba(0,0,0,.18);font-size:12px}
+    .searchRow{display:flex;gap:10px;align-items:center}
+    .libList{display:flex;flex-direction:column;gap:8px}
+    .libItem{
+      padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04);
+      cursor:pointer;
+    }
+    .libItem .name{font-weight:950;font-size:13px;margin:0}
+    .libItem .meta{margin:4px 0 0;font-size:12px;color:var(--muted);white-space:pre-wrap}
   </style>
 </head>
 <body>
@@ -121,12 +164,12 @@
 <header>
   <div>
     <h1>Triathlon Trainingsplan – Sprint</h1>
-    <p class="sub">Klickbar + speicherbar auf Android/iPad/PC. Umplanen pro Datum möglich.</p>
+    <p class="sub">Tippe in der Checkliste auf eine Einheit → du bekommst eine Schritt-für-Schritt-Anleitung. Schwimmtechnik rotiert alle 2 Wochen, Laufdauer steigt automatisch.</p>
     <div class="pillRow">
-      <div class="pill"><strong>Swim GA1:</strong> 1:38–1:43/100 m</div>
+      <div class="pill"><strong>Swim:</strong> 25m Bahn · Technik = Effizienz/Tempo-Stabilität</div>
       <div class="pill"><strong>Bike GA1:</strong> 130–165 W</div>
-      <div class="pill"><strong>Run Easy:</strong> 5:55–6:20/km</div>
-      <div class="pill"><strong>Knie:</strong> keine Sprints · bergab defensiv · Kadenz 165–172</div>
+      <div class="pill"><strong>Run Easy:</strong> HR/RPE geführt (bei dir ~5:20@160 ok)</div>
+      <div class="pill"><strong>Knie:</strong> flach · keine Sprints · Stop-Regeln</div>
     </div>
   </div>
   <div class="row">
@@ -176,18 +219,19 @@
       </div>
 
       <div class="section">
-        <h3>Details / Ablauf</h3>
+        <h3>Details / Ablauf (Gesamt)</h3>
         <div id="todayDetails">—</div>
       </div>
 
       <div class="section">
-        <h3>Checkliste</h3>
+        <h3>Checkliste (antippen → Anleitung)</h3>
+        <div class="small">Tipp: Tippe auf den <span class="kbd">Namen</span> einer Einheit, nicht auf die Checkbox.</div>
         <div class="checklist" id="checklist"></div>
       </div>
 
       <div class="section">
         <h3>Notizen</h3>
-        <textarea id="notes" placeholder="Wie war’s? Pace/Watt/Zeiten? Knie (0–10)?"></textarea>
+        <textarea id="notes" placeholder="Wie war’s? Zeiten/Watt/HR? Knie (0–10)?"></textarea>
         <div class="row" style="margin-top:10px">
           <button class="btnPrimary" id="btnSave" type="button">Speichern</button>
           <button id="btnClearNotes" type="button">Notiz löschen</button>
@@ -203,6 +247,7 @@
       <div class="tabs">
         <div class="tab active" data-tab="week">Woche</div>
         <div class="tab" data-tab="swim">Schwimmen</div>
+        <div class="tab" data-tab="lib">Bibliothek</div>
       </div>
     </div>
     <div class="cardBody">
@@ -215,25 +260,24 @@
 
       <div id="tab-swim" style="display:none">
         <div class="section">
-          <h3>Mittwoch (55 min)</h3>
-          <ul>
-            <li>300 ein (locker, Fokus Wasserlage)</li>
-            <li>6×50 Technik (je 25 Drill + 25 Swim), 15–20s Pause</li>
-            <li>4×300 @ 1:38–1:42/100 m, 25–40s Pause</li>
-            <li>6×50 zügig @ ~1:30–1:33/100 m, 20s Pause</li>
-            <li>200 aus</li>
-          </ul>
+          <h3>Variable Schwimmtechnik (Rotation alle 2 Wochen)</h3>
+          <div class="small" id="swimRotationInfo">—</div>
+          <div class="divider"></div>
+          <div class="small">Du kannst in der Tages-Checkliste auf „Schwimmen Mittwoch/Freitag“ tippen → dann siehst du den aktuell rotierenden Technikblock.</div>
         </div>
+      </div>
+
+      <div id="tab-lib" style="display:none">
         <div class="section">
-          <h3>Freitag (55 min)</h3>
-          <ul>
-            <li>300 ein</li>
-            <li>4×50 Technik, 15–20s Pause</li>
-            <li>5×300 @ 1:38–1:43/100 m, 25–45s Pause</li>
-            <li>6×25 schnell (sauber!), 20–30s Pause</li>
-            <li>200 aus</li>
-          </ul>
+          <h3>Bibliothek (alles klickbar)</h3>
+          <div class="small">Suche nach „Mobility“, „Scull“, „Run“, „Bike“… tippen öffnet die genaue Anleitung.</div>
+          <div style="height:10px"></div>
+          <div class="searchRow">
+            <input id="libSearch" placeholder="Suche…" />
+            <button id="libClear" type="button">X</button>
+          </div>
         </div>
+        <div class="libList" id="libList"></div>
       </div>
     </div>
   </aside>
@@ -248,29 +292,39 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modalOverlay" id="modalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal">
+    <div class="modalHeader">
+      <div>
+        <h3 id="modalTitle">—</h3>
+        <div class="chipRow" id="modalChips"></div>
+      </div>
+      <button class="modalClose" id="modalClose" type="button">✕</button>
+    </div>
+    <div class="modalBody">
+      <div class="small" id="modalIntro">—</div>
+      <div class="divider"></div>
+      <div id="modalContent">—</div>
+      <div class="divider"></div>
+      <div class="small" id="modalRules">—</div>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
 
-  // ---------- helpers (safe) ----------
   function $(id){ return document.getElementById(id); }
   function safeText(el, txt){ if(el) el.textContent = txt; }
   function safeHTML(el, html){ if(el) el.innerHTML = html; }
   function pad2(n){ return (n<10 ? "0" : "") + n; }
-  function toISODate(d){
-    return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
-  }
-  function addDays(d, n){
-    var x = new Date(d.getTime());
-    x.setDate(x.getDate()+n);
-    return x;
-  }
+  function toISODate(d){ return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+  function addDays(d, n){ var x=new Date(d.getTime()); x.setDate(x.getDate()+n); return x; }
   function fmtDate(d){
-    try{
-      return d.toLocaleDateString("de-DE",{weekday:"long",year:"numeric",month:"2-digit",day:"2-digit"});
-    }catch(e){
-      return d.toDateString();
-    }
+    try{ return d.toLocaleDateString("de-DE",{weekday:"long",year:"numeric",month:"2-digit",day:"2-digit"}); }
+    catch(e){ return d.toDateString(); }
   }
   function loadLabel(load){
     if((load||"").indexOf("leicht")>=0) return {text:"Belastung: leicht", cls:"good"};
@@ -278,21 +332,14 @@
     return {text:"Belastung: hoch", cls:"bad"};
   }
 
-  // ---------- hard error handling ----------
   var statusLine = $("statusLine");
   var errorLine  = $("errorLine");
 
-  function setStatusOK(msg){
-    safeHTML(statusLine, '<span class="statusOk">'+msg+'</span>');
-  }
-  function setStatusWARN(msg){
-    safeHTML(statusLine, '<span class="statusWarn">'+msg+'</span>');
-  }
-  function setStatusBAD(msg){
-    safeHTML(statusLine, '<span class="statusBad">'+msg+'</span>');
-  }
+  function setStatusOK(msg){ safeHTML(statusLine, '<span class="statusOk">'+msg+'</span>'); }
+  function setStatusWARN(msg){ safeHTML(statusLine, '<span class="statusWarn">'+msg+'</span>'); }
+  function setStatusBAD(msg){ safeHTML(statusLine, '<span class="statusBad">'+msg+'</span>'); }
 
-  window.onerror = function(msg, url, line, col, err){
+  window.onerror = function(msg, url, line){
     safeText(errorLine, "JS Fehler: " + msg + (line ? (" (Zeile " + line + ")") : ""));
     setStatusBAD("JS Fehler ❌ – siehe Meldung");
     return false;
@@ -302,22 +349,18 @@
     setStatusBAD("JS Fehler ❌ – siehe Meldung");
   };
 
-  // ---------- run after DOM ready ----------
   function onReady(fn){
-    if(document.readyState === "loading"){
-      document.addEventListener("DOMContentLoaded", fn);
-    } else {
-      fn();
-    }
+    if(document.readyState === "loading"){ document.addEventListener("DOMContentLoaded", fn); }
+    else { fn(); }
   }
 
   onReady(function(){
-    // verify all required elements exist (prevents silent death)
     var requiredIds = [
-      "btnReload","btnToday","btnPrev","btnNext","btnSetRest","btnClearOverride","btnApplyOverride",
-      "overrideSelect","todayDay","todayDate","todaySummary","todayDuration","todayFocus",
-      "loadDot","loadText","todayDetails","checklist","notes","btnSave","btnClearNotes",
-      "saveHint","weekRows","footerHint","btnExport","tab-week","tab-swim"
+      "btnReload","btnToday","btnPrev","btnNext","btnSetRest","btnClearOverride","btnApplyOverride","overrideSelect",
+      "todayDay","todayDate","todaySummary","todayDuration","todayFocus","loadDot","loadText","todayDetails","checklist",
+      "notes","btnSave","btnClearNotes","saveHint","weekRows","footerHint","btnExport","tab-week","tab-swim","tab-lib",
+      "modalOverlay","modalClose","modalTitle","modalChips","modalIntro","modalContent","modalRules",
+      "libSearch","libClear","libList","swimRotationInfo"
     ];
     for(var i=0;i<requiredIds.length;i++){
       if(!$(requiredIds[i])){
@@ -327,63 +370,349 @@
       }
     }
 
-    // ---------- storage test ----------
     var storageOK = true;
-    try{
-      localStorage.setItem("__tri_test__", "1");
-      localStorage.removeItem("__tri_test__");
-    }catch(e){
-      storageOK = false;
+    try{ localStorage.setItem("__tri_test__", "1"); localStorage.removeItem("__tri_test__"); }
+    catch(e){ storageOK = false; }
+
+    if(storageOK){ setStatusOK("JS aktiv ✅ | Speicher bereit ✅"); safeText(errorLine,""); }
+    else { setStatusWARN("JS aktiv ✅ | Speicher blockiert ⚠️"); }
+
+    // ---------------- Rotation (Swim) ----------------
+    // Anchor: 2025-01-06 (Montag) – nur für "alle 2 Wochen" Berechnung.
+    var SWIM_ANCHOR = new Date(2025,0,6);
+    function daysBetween(a,b){
+      var ms = 24*60*60*1000;
+      var aa = new Date(a.getFullYear(),a.getMonth(),a.getDate()).getTime();
+      var bb = new Date(b.getFullYear(),b.getMonth(),b.getDate()).getTime();
+      return Math.floor((bb-aa)/ms);
+    }
+    function swimCycleIndex(date){
+      var d = Math.max(0, daysBetween(SWIM_ANCHOR, date));
+      return Math.floor(d/14); // alle 14 Tage wechseln
     }
 
-    if(storageOK){
-      setStatusOK("JS aktiv ✅ | Speicher bereit ✅");
-      safeText(errorLine, "");
-    } else {
-      setStatusWARN("JS aktiv ✅ | Speicher blockiert ⚠️ (Notizen bleiben ggf. nicht)");
-      safeText(errorLine, "Hinweis: Dein Browser blockiert localStorage. Wenn Notizen nicht bleiben: Chrome Cache löschen oder anderen Browser testen.");
+    var SWIM_TECH_BLOCKS = [
+      {
+        name:"Block A (Catch + Ellbogen hoch)",
+        drills:[
+          {name:"Fingertip Drag", cue:"Finger streifen Wasser, Ellbogen hoch, Schultern locker."},
+          {name:"Scull #1", cue:"Vorne Wasser fühlen, kleine Bewegungen, konstanter Druck."},
+          {name:"Scull #2", cue:"Etwas weiter hinten im Catch, Druck nach hinten halten."}
+        ]
+      },
+      {
+        name:"Block B (Rotation + Stabilität)",
+        drills:[
+          {name:"6-Kick-Switch", cue:"6 Beinschläge Seite, sauberer Wechsel, Kopf ruhig."},
+          {name:"Catch-Up (moderat)", cue:"Länge halten ohne Stop – Rhythmus flüssig."},
+          {name:"Single-Arm (abwechselnd)", cue:"Stabiler Rumpf, Zugbahn sauber, Atmung ruhig."}
+        ]
+      },
+      {
+        name:"Block C (Tempo-Stabilität)",
+        drills:[
+          {name:"3-3-3 (3 Züge links/3 rechts/3 normal)", cue:"Kontrollierte Rotation, Symmetrie."},
+          {name:"Build 25s (locker→zügig)", cue:"Tempo aus Technik, nicht aus Hektik."},
+          {name:"Fäuste (kurz)", cue:"Wassergefühl im Unterarm, danach normal = besserer Catch."}
+        ]
+      }
+    ];
+
+    function getCurrentSwimBlock(date){
+      var idx = swimCycleIndex(date) % SWIM_TECH_BLOCKS.length;
+      return SWIM_TECH_BLOCKS[idx];
     }
 
-    // ---------- plan data ----------
-    var days = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
-    var PLAN = {
-      1:{focus:"Regeneration + Kraft",duration:"40–45 min",load:"leicht",summary:"Bodyweight + Mobility.",
-        details:"• Bodyweight 30 min (kontrolliert)\n• Mobility 10–15 min (Bauernfeind)",
-        checklist:[{t:"Kraft 30 min",d:"Kontrolliert."},{t:"Mobility 10–15",d:"Bauernfeind."}]},
-      2:{focus:"Lauf + Core",duration:"70–75 min",load:"moderat",summary:"Lauf easy + Core/Beinachse + Mobility.",
-        details:"• Lauf 30–35 min @ 5:55–6:20 flach, Kadenz 165–172\n• Core/Beinachse 30 min\n• Mobility 10 min",
-        checklist:[{t:"Lauf easy",d:"Flach, kein Tempo."},{t:"Core",d:"Kontrolliert."},{t:"Mobility",d:"Bauernfeind."}]},
-      3:{focus:"Schwimmen + Tennis",duration:"ca. 3 h",load:"hoch",summary:"Schwimmen 55 min + Tennis 2 h.",
-        details:"• Swim: 300 ein, 6×50 Technik, 4×300 @ 1:38–1:42, 6×50 @ 1:30–1:33, 200 aus\n• Tennis 2 h",
-        checklist:[{t:"Schwimmen",d:"Konstanz."},{t:"Tennis",d:"Warm-up."}]},
-      4:{focus:"Rad + Kraft",duration:"90–105 min",load:"moderat",summary:"Rad GA1 + Stabi.",
-        details:"• Rad 60–75 min @ 130–165 W (rpm 85–95)\n• Kraft 30 min (Stabi/Beinachse)",
-        checklist:[{t:"Rad GA1",d:"130–165 W."},{t:"Kraft",d:"Kontrolle."}]},
-      5:{focus:"Schwimmen Key",duration:"55–60 min",load:"moderat",summary:"Key Swim 55 min.",
-        details:"• 300 ein, 4×50 Technik, 5×300 @ 1:38–1:43, 6×25 schnell, 200 aus",
-        checklist:[{t:"Schwimmen Key",d:"300er stabil."}]},
-      6:{focus:"Lange Ausfahrt",duration:"2–3 h (+ 5–10 min)",load:"hoch",summary:"Rad lang GA1, optional Koppellauf.",
-        details:"• Rad 2–3 h @ 130–165 W\n• Optional 5–10 min Koppellauf nur Knie 0–1/10",
-        checklist:[{t:"Rad lang",d:"Gleichmäßig."},{t:"Optional Koppellauf",d:"Nur Knie top."}]},
-      0:{focus:"Lauf + Mobility",duration:"50–60 min",load:"moderat",summary:"Lauf locker + Mobility.",
-        details:"• Lauf 30–35 min @ 5:45–6:10 flach, Kadenz 165–172\n• Mobility 10–15 min",
-        checklist:[{t:"Lauf locker",d:"Flach & easy."},{t:"Mobility",d:"Bauernfeind."}]}
+    // ---------------- Laufprogression ----------------
+    // Logik: alle 2 erledigten run_easy -> +5 min (max 55).
+    // Baseline 30 min, Start bei deinem aktuellen stabilen Bereich.
+    var RUN_BASE_MIN = 30;
+    var RUN_STEP_MIN = 5;
+    var RUN_MAX_MIN  = 55;
+
+    // Wir speichern zusätzlich pro Datum "doneLibKeys", damit die Progression sauber zählen kann.
+    function doneKeyFor(iso){ return "tri_"+iso+"_doneLib"; }
+
+    // -------------- Base Library (statisch) --------------
+    // Swim Mi/Fr und Run easy werden dynamisch gebaut (wegen Rotation + Progression)
+    var LIB_BASE = {
+      "mobility_reha": {
+        title: "Mobility / Reha (Bauernfeind-App)",
+        chips: ["10–15 min", "Ziel: Knie ruhig", "Qualität > Menge"],
+        intro: "Du machst hier bewusst nichts Wildes. Ziel: Gelenke 'schmieren', Spannung rausnehmen, Knie beruhigen.",
+        content:
+          "<div class='section'><h3>So machst du’s (idiotensicher)</h3>" +
+          "<ul>" +
+          "<li>Starte die <span class='strong'>Bauernfeind-App</span> → wähle dein <span class='strong'>Knie-/Reha-Programm</span>.</li>" +
+          "<li>Intensität: <span class='strong'>leicht bis moderat</span>. Du sollst dich danach <span class='strong'>besser</span> fühlen.</li>" +
+          "<li>Wenn die App Übungen mit Sprüngen/quick turns hat: <span class='strong'>skippen</span>.</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>Mini-Check (30 Sekunden)</h3>" +
+          "<ul><li>Schmerz währenddessen ≤ <span class='strong'>2/10</span></li>" +
+          "<li>Danach: Knie fühlt sich <span class='strong'>leichter</span> an</li>" +
+          "<li>Keine 'Zug'-Schmerzen in der Kniekehle</li></ul></div>",
+        rules: "Stop/Anpassen: Schmerz >2/10 oder stechend → abbrechen, nur sehr sanfte Bewegungen + ggf. Spaziergang. Am nächsten Lauftag flach & kürzer."
+      },
+
+      "strength_bw": {
+        title: "Bodyweight Kraft (Triathlon-Basis)",
+        chips: ["~30 min", "Beinachse + Core", "kontrolliert"],
+        intro: "Ziel: stabiler Rumpf + stabile Beinachse, damit Rad/Laufen 'billiger' wird und das Knie geschützt ist.",
+        content:
+          "<div class='section'><h3>Warm-up (3–4 min)</h3><ul>" +
+          "<li>1 min lockeres Gehen auf der Stelle</li>" +
+          "<li>1 min Hüftkreisen + Schulterkreisen</li>" +
+          "<li>1–2 min Air Squat sehr klein (nur schmerzfrei)</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>Hauptteil (20–22 min)</h3>" +
+          "<ul>" +
+          "<li><span class='strong'>Split Squat isometrisch</span> (klein): 3×30–45s/Seite</li>" +
+          "<li><span class='strong'>Glute Bridge</span>: 3×10–12 (oben 2s halten)</li>" +
+          "<li><span class='strong'>Dead Bug</span>: 3×8/Seite langsam</li>" +
+          "<li><span class='strong'>Side Plank</span>: 2–3×30–45s/Seite</li>" +
+          "<li><span class='strong'>Wadenheben</span>: 3×12–15</li>" +
+          "</ul>" +
+          "<div class='small'>Optional (wenn Knie top): 2×10 Step-downs sehr klein & kontrolliert.</div>" +
+          "</div>" +
+          "<div class='section'><h3>Cool-down (3–4 min)</h3><ul>" +
+          "<li>Hüftbeuger + Gesäß leicht dehnen</li>" +
+          "<li>Blackroll: Waden/Oberschenkel außen leicht</li>" +
+          "</ul></div>",
+        rules: "Knie-Regel: kein stechender Schmerz. Wenn Kniekehle zieht: Bewegungsweg kleiner, Tempo langsamer, isometrisch bevorzugen."
+      },
+
+      "bike_ga1": {
+        title: "Rad GA1 (Basis, gleichmäßig)",
+        chips: ["60–75 min", "130–165 W", "rpm 85–95"],
+        intro: "Ziel: Aerobe Basis ohne Stress. Das ist der Motor fürs Rennen.",
+        content:
+          "<div class='section'><h3>Ablauf</h3><ul>" +
+          "<li>10 min einrollen: 120–140 W</li>" +
+          "<li>40–55 min GA1: <span class='strong'>130–165 W</span>, Tritt rund</li>" +
+          "<li>5–10 min ausrollen</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>Technik-Fokus</h3><ul>" +
+          "<li>Schultern locker, Ellbogen weich</li>" +
+          "<li>Atmung ruhig (du könntest sprechen)</li>" +
+          "<li>Wenn Beine schwer: 2×2 min hohe Kadenz (95–105 rpm) locker</li>" +
+          "</ul></div>",
+        rules: "Kein Intervallzwang. Heute zählt: gleichmäßig durchziehen ohne zu überziehen."
+      },
+
+      "bike_long": {
+        title: "Lange Ausfahrt (GA1)",
+        chips: ["2–3 h", "130–165 W", "Fueling!"],
+        intro: "Ziel: Ausdauer + ökonomisches Treten. Das ist dein 'Langformat'.",
+        content:
+          "<div class='section'><h3>Ablauf</h3><ul>" +
+          "<li>15 min locker einrollen</li>" +
+          "<li>Hauptteil: <span class='strong'>130–165 W</span> gleichmäßig</li>" +
+          "<li>Letzte 10–15 min: sauber ausrollen</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>Fueling (idiotensicher)</h3><ul>" +
+          "<li>Ab Minute 20: alle 10–15 min ein paar Schlucke trinken</li>" +
+          "<li>Pro Stunde: <span class='strong'>40–70 g Carbs</span> (Riegel/Gel/Saftschorle)</li>" +
+          "<li>Wenn kalt: trotzdem trinken (Timer!)</li>" +
+          "</ul></div>",
+        rules: "Wenn du platt wirst: Watt senken, nicht drücken. Ziel ist Dauer, nicht Heldentum."
+      },
+
+      "brick_optional": {
+        title: "Optionaler Koppellauf nach Rad",
+        chips: ["5–10 min", "nur wenn Knie 0–1/10", "super locker"],
+        intro: "Nur zum Gewöhnen – nicht zum Trainieren. Wenn dein Knie auch nur leicht meckert: lassen.",
+        content:
+          "<div class='section'><h3>Ablauf</h3><ul>" +
+          "<li>Rad abstellen → Schuhe → <span class='strong'>5–10 min</span> sehr locker traben</li>" +
+          "<li>Flach, Kadenz hoch, kein Tempo</li>" +
+          "</ul></div>",
+        rules: "Wenn du am nächsten Tag irgendwas spürst: nächstes Mal weglassen."
+      }
     };
+
+    // -------- dynamic library builders (Run + Swim) --------
+    function countCompleted(libKey, lookbackDays, refDate){
+      var ms = 24*60*60*1000;
+      var count = 0;
+      for(var i=0;i<lookbackDays;i++){
+        var d = new Date(refDate.getTime() - i*ms);
+        var iso = toISODate(d);
+        var raw = getLS(doneKeyFor(iso));
+        if(!raw) continue;
+        try{
+          var arr = JSON.parse(raw);
+          if(Array.isArray(arr) && arr.indexOf(libKey) >= 0) count++;
+        }catch(e){}
+      }
+      return count;
+    }
+
+    function runMinutesFor(date){
+      var completed = countCompleted("run_easy", 56, date); // 8 Wochen
+      var steps = Math.floor(completed / 2); // alle 2 Runs +5
+      var minutes = Math.min(RUN_MAX_MIN, RUN_BASE_MIN + steps*RUN_STEP_MIN);
+      return minutes;
+    }
+
+    function makeRunEasyLib(date){
+      var minutes = runMinutesFor(date);
+      var mainMin = Math.max(15, minutes - 10); // warmup+cooldown ~10
+      return {
+        title: "Lauf easy (knieschonend, HR/RPE geführt)",
+        chips: [minutes+" min gesamt", "flach", "Kadenz 165–172"],
+        intro: "Bei dir ist easy aktuell oft ~5:20/km bei ~160 bpm. Das ist okay – wichtiger ist: flach, rund, ohne Druck.",
+        content:
+          "<div class='section'><h3>Ablauf (heute: "+minutes+" min)</h3><ul>" +
+          "<li><span class='strong'>5–8 min</span> Gehen + sehr lockeres Traben</li>" +
+          "<li><span class='strong'>"+mainMin+" min</span> easy laufen (RPE 3–4/10; du könntest reden)</li>" +
+          "<li><span class='strong'>2–3 min</span> auslaufen/gehen</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>Worauf du achten sollst</h3><ul>" +
+          "<li>Route: <span class='strong'>flach</span>, keine Downhills</li>" +
+          "<li>Schritt: <span class='strong'>kurz & schnell</span> (Kadenz 165–172)</li>" +
+          "<li>Fußaufsatz: unter dem Körperschwerpunkt (nicht weit vorne)</li>" +
+          "<li>Wenn HR hochschießt: 60–90s gehen, dann weiter</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>Stop-Regeln (idiotensicher)</h3><ul>" +
+          "<li>Schmerz > <span class='strong'>2/10</span> oder stechend → sofort gehen</li>" +
+          "<li>Kniekehle zieht zunehmend → abbrechen, nächster Lauf kürzer</li>" +
+          "<li>Am Folgetag deutlich schlechter → nächste Einheit ersetzen (Rad/Swim)</li>" +
+          "</ul></div>",
+        rules: "Progression automatisch: alle 2 erledigten Runs +5 min (max 55). Wenn Knie unsicher: lieber abbrechen und den Fortschritt nicht erzwingen."
+      };
+    }
+
+    function drillLine(d){ return "<li><span class='strong'>"+d.name+"</span>: "+d.cue+"</li>"; }
+
+    function makeSwimWedLib(date){
+      var block = getCurrentSwimBlock(date);
+      return {
+        title: "Schwimmen Mittwoch (55 min) – GA + Technik",
+        chips: ["~2200–2500 m", "25m Becken", "Rotation: "+block.name],
+        intro: "Du hast gute Wasserlage & 3er Atmung. Technik hier: Catch/Druck, Rhythmus, Tempo stabil halten. Technikblock rotiert alle 2 Wochen.",
+        content:
+          "<div class='section'><h3>1) Einschwimmen</h3><ul><li>300 m locker (Kraul). Fokus: langer Körper, ruhiger Kopf</li></ul></div>" +
+          "<div class='section'><h3>2) Technikblock (Rotation): 6×50 (25 Drill + 25 Swim)</h3>" +
+          "<ul>"+drillLine(block.drills[0])+drillLine(block.drills[1])+drillLine(block.drills[2])+"</ul>" +
+          "<div class='small'>Wiederhole die 3 Drills je 2× → insgesamt 6×50. Pause: 15–20s. Ziel: Qualität, nicht ballern.</div>" +
+          "</div>" +
+          "<div class='section'><h3>3) Hauptset 4×300</h3><ul>" +
+          "<li>300 m @ <span class='strong'>1:38–1:42/100</span></li>" +
+          "<li>Pause: 25–40s</li>" +
+          "<li>Fokus: gleichmäßiger Split (nicht vorne zu hart)</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>4) Zügig 6×50</h3><ul>" +
+          "<li>50 m @ ~<span class='strong'>1:30–1:33/100</span></li>" +
+          "<li>Pause: 20s</li>" +
+          "<li>Fokus: Tempo aus besserem Catch, nicht aus Hektik</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>5) Ausschwimmen</h3><ul><li>200 m locker</li></ul></div>",
+        rules: "Wenn du müde wirst: Technikblock sauber, 300er notfalls +10s/100 langsamer. Ziel: stabil schwimmen, nicht zerstören."
+      };
+    }
+
+    function makeSwimFriLib(date){
+      var block = getCurrentSwimBlock(date);
+      return {
+        title: "Schwimmen Freitag (55 min) – Key Swim",
+        chips: ["~2300–2600 m", "25m Becken", "Rotation: "+block.name],
+        intro: "Freitag ist der 'Key'. Du hältst dein solides Tempo mit Struktur & kurzen schnellen Reizen. Technikblock rotiert alle 2 Wochen.",
+        content:
+          "<div class='section'><h3>1) Einschwimmen</h3><ul><li>300 m locker</li></ul></div>" +
+          "<div class='section'><h3>2) Technik (Rotation): 4×50 (25 Drill + 25 Swim)</h3>" +
+          "<ul>"+drillLine(block.drills[0])+drillLine(block.drills[1])+"</ul>" +
+          "<div class='small'>Mache Drill 1 & 2 je 2× → insgesamt 4×50. Pause 15–20s.</div>" +
+          "</div>" +
+          "<div class='section'><h3>3) Hauptset 5×300</h3><ul>" +
+          "<li>300 m @ <span class='strong'>1:38–1:43/100</span></li>" +
+          "<li>Pause: 25–45s</li>" +
+          "<li>Ziel: alle 5 gleich (wenn möglich letzter minimal schneller)</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>4) Schnell 6×25</h3><ul>" +
+          "<li>25 m schnell, sauber, lang (nicht „strampeln“)</li>" +
+          "<li>Pause 20–30s</li>" +
+          "</ul></div>" +
+          "<div class='section'><h3>5) Ausschwimmen</h3><ul><li>200 m locker</li></ul></div>",
+        rules: "Wenn Schultern dicht: 25er weglassen oder als Technik schwimmen. Qualität > Ego."
+      };
+    }
+
+    function LIB_FOR_DATE(date){
+      // Base + dynamisch erzeugte Einträge
+      var out = {};
+      for(var k in LIB_BASE) out[k] = LIB_BASE[k];
+      out["run_easy"] = makeRunEasyLib(date);
+      out["swim_wed"] = makeSwimWedLib(date);
+      out["swim_fri"] = makeSwimFriLib(date);
+      return out;
+    }
+
+    // --------- WEEK STRUCTURE ----------
+    var days = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
+
+    // PLAN: descriptions werden teilweise dynamisch (Run-Minuten, Swim-Rotation)
+    function buildPlanForDate(date){
+      var lib = LIB_FOR_DATE(date);
+      var runMin = runMinutesFor(date);
+      var runDesc = "Flach, Kadenz 165–172. Heute: "+runMin+" min gesamt.";
+
+      // Swim rotation name for summary
+      var block = getCurrentSwimBlock(date);
+      var rotName = block.name;
+
+      return {
+        1:{focus:"Regeneration + Kraft",duration:"40–45 min",load:"leicht",summary:"Bodyweight + Mobility.",
+          details:"• Bodyweight 30 min (kontrolliert)\n• Mobility 10–15 min (Bauernfeind)",
+          checklist:[
+            {t:"Bodyweight Kraft (30 min)",d:"Beinachse + Core, kontrolliert.",libKey:"strength_bw"},
+            {t:"Mobility/Reha (10–15 min)",d:"Bauernfeind-App, leicht bis moderat.",libKey:"mobility_reha"}
+          ]},
+        2:{focus:"Lauf + Core",duration:"70–75 min",load:"moderat",summary:"Lauf easy + Core/Beinachse + Mobility.",
+          details:"• Lauf "+runMin+" min HR/RPE easy\n• Core/Beinachse 30 min\n• Mobility 10 min",
+          checklist:[
+            {t:"Lauf easy ("+runMin+" min)",d:runDesc,libKey:"run_easy"},
+            {t:"Bodyweight Kraft (30 min)",d:"Core + Beinachse (kontrolliert).",libKey:"strength_bw"},
+            {t:"Mobility/Reha (10 min)",d:"Bauernfeind-App (kurz).",libKey:"mobility_reha"}
+          ]},
+        3:{focus:"Schwimmen + Tennis",duration:"ca. 3 h",load:"hoch",summary:"Schwimmen 55 min (Rotation) + Tennis 2 h.",
+          details:"• Swim Mittwoch 55 min ("+rotName+")\n• Tennis 2 h",
+          checklist:[
+            {t:"Schwimmen Mittwoch (55 min)",d:"GA + Technik (Rotation: "+rotName+").",libKey:"swim_wed"},
+            {t:"Tennis 2 h",d:"Warm-up ordentlich, danach auslaufen/gehen 3–5 min.",libKey:null}
+          ]},
+        4:{focus:"Rad + Kraft",duration:"90–105 min",load:"moderat",summary:"Rad GA1 + Stabi.",
+          details:"• Rad 60–75 min @ 130–165 W\n• Kraft 30 min (Stabi/Beinachse)",
+          checklist:[
+            {t:"Rad GA1 (60–75 min)",d:"130–165 W, rpm 85–95, gleichmäßig.",libKey:"bike_ga1"},
+            {t:"Bodyweight Kraft (30 min)",d:"Stabi/Beinachse.",libKey:"strength_bw"}
+          ]},
+        5:{focus:"Schwimmen Key",duration:"55–60 min",load:"moderat",summary:"Key Swim 55 min (Rotation).",
+          details:"• Swim Freitag 55 min ("+rotName+")\n• Optional Mobility kurz",
+          checklist:[
+            {t:"Schwimmen Freitag (55 min)",d:"Key Swim (Rotation: "+rotName+").",libKey:"swim_fri"},
+            {t:"Optional Mobility/Reha (10 min)",d:"Nur wenn du dich steif fühlst.",libKey:"mobility_reha"}
+          ]},
+        6:{focus:"Lange Ausfahrt",duration:"2–3 h (+ 5–10 min)",load:"hoch",summary:"Rad lang GA1, optional Koppellauf.",
+          details:"• Rad 2–3 h @ 130–165 W\n• Optional Koppellauf 5–10 min",
+          checklist:[
+            {t:"Rad lang GA1 (2–3 h)",d:"Fueling beachten, gleichmäßig.",libKey:"bike_long"},
+            {t:"Optional Koppellauf (5–10 min)",d:"Nur wenn Knie 0–1/10.",libKey:"brick_optional"}
+          ]},
+        0:{focus:"Lauf + Mobility",duration:"50–60 min",load:"moderat",summary:"Lauf locker + Mobility.",
+          details:"• Lauf "+runMin+" min easy\n• Mobility 10–15 min",
+          checklist:[
+            {t:"Lauf easy ("+runMin+" min)",d:runDesc,libKey:"run_easy"},
+            {t:"Mobility/Reha (10–15 min)",d:"Bauernfeind-App.",libKey:"mobility_reha"}
+          ]}
+      };
+    }
 
     // ---------- persistence ----------
     function keyFor(iso, suffix){ return "tri_"+iso+"_"+suffix; }
-    function getLS(k){
-      if(!storageOK) return null;
-      try{ return localStorage.getItem(k); }catch(e){ return null; }
-    }
-    function setLS(k,v){
-      if(!storageOK) return false;
-      try{ localStorage.setItem(k, v); return true; }catch(e){ return false; }
-    }
-    function delLS(k){
-      if(!storageOK) return false;
-      try{ localStorage.removeItem(k); return true; }catch(e){ return false; }
-    }
+    function getLS(k){ if(!storageOK) return null; try{ return localStorage.getItem(k); }catch(e){ return null; } }
+    function setLS(k,v){ if(!storageOK) return false; try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+    function delLS(k){ if(!storageOK) return false; try{ localStorage.removeItem(k); return true; }catch(e){ return false; } }
+
     function getNotes(iso){ return getLS(keyFor(iso,"notes")) || ""; }
     function setNotes(iso, v){ return setLS(keyFor(iso,"notes"), v); }
     function getOverride(iso){ return getLS(keyFor(iso,"override")) || ""; }
@@ -393,11 +722,75 @@
       var raw = getLS(keyFor(iso,"checks")) || "{}";
       try{ return JSON.parse(raw); }catch(e){ return {}; }
     }
-    function setChecks(iso, obj){
-      return setLS(keyFor(iso,"checks"), JSON.stringify(obj));
+    function setChecks(iso, obj){ return setLS(keyFor(iso,"checks"), JSON.stringify(obj)); }
+
+    function getDoneLibArr(iso){
+      var raw = getLS(doneKeyFor(iso));
+      if(!raw) return [];
+      try{
+        var arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr : [];
+      }catch(e){ return []; }
+    }
+    function setDoneLibArr(iso, arr){
+      return setLS(doneKeyFor(iso), JSON.stringify(arr));
+    }
+    function markLibDone(iso, libKey, done){
+      if(!libKey) return;
+      var arr = getDoneLibArr(iso);
+      var idx = arr.indexOf(libKey);
+      if(done && idx < 0) arr.push(libKey);
+      if(!done && idx >= 0) arr.splice(idx,1);
+      setDoneLibArr(iso, arr);
     }
 
-    // ---------- UI rendering ----------
+    // ---------- modal ----------
+    var modalOverlay = $("modalOverlay");
+    var modalClose   = $("modalClose");
+    var modalTitle   = $("modalTitle");
+    var modalChips   = $("modalChips");
+    var modalIntro   = $("modalIntro");
+    var modalContent = $("modalContent");
+    var modalRules   = $("modalRules");
+
+    function openModal(libKey, date){
+      var LIB = LIB_FOR_DATE(date || new Date());
+      if(!libKey || !LIB[libKey]){
+        safeText(modalTitle, "Info");
+        modalChips.innerHTML = "";
+        safeText(modalIntro, "Für diese Position gibt es keine Detail-Anleitung.");
+        modalContent.innerHTML = "<div class='small'>Wenn du willst, kann ich das nachtragen.</div>";
+        safeText(modalRules, "");
+      } else {
+        var x = LIB[libKey];
+        safeText(modalTitle, x.title);
+        modalChips.innerHTML = "";
+        for(var i=0;i<(x.chips||[]).length;i++){
+          var c = document.createElement("div");
+          c.className = "chip";
+          c.textContent = x.chips[i];
+          modalChips.appendChild(c);
+        }
+        safeText(modalIntro, x.intro || "");
+        modalContent.innerHTML = x.content || "";
+        safeText(modalRules, x.rules || "");
+      }
+      modalOverlay.style.display = "flex";
+      modalOverlay.setAttribute("aria-hidden","false");
+    }
+    function closeModal(){
+      modalOverlay.style.display = "none";
+      modalOverlay.setAttribute("aria-hidden","true");
+    }
+    modalClose.addEventListener("click", closeModal);
+    modalOverlay.addEventListener("click", function(e){
+      if(e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape") closeModal();
+    });
+
+    // ---------- rendering ----------
     var currentDate = new Date();
 
     function renderWeekTable(){
@@ -405,9 +798,11 @@
       tbody.innerHTML = "";
       var order = [1,2,3,4,5,6,0];
       var names = {0:"So",1:"Mo",2:"Di",3:"Mi",4:"Do",5:"Fr",6:"Sa"};
+      var plan = buildPlanForDate(currentDate);
+
       for(var i=0;i<order.length;i++){
         var idx = order[i];
-        var p = PLAN[idx];
+        var p = plan[idx];
         var tr = document.createElement("tr");
         tr.innerHTML = "<td><strong>"+names[idx]+"</strong></td><td>"+p.summary+"</td><td>"+p.duration+"</td>";
         tbody.appendChild(tr);
@@ -421,11 +816,11 @@
         {v:"", label:"— keine Änderung —"},
         {v:"rest", label:"Restday (kein Sport)"},
         {v:"1", label:"Montag – Kraft+Mobility"},
-        {v:"2", label:"Dienstag – Lauf+Core+Mobility"},
+        {v:"2", label:"Dienstag – Lauf+Kraft+Mobility"},
         {v:"3", label:"Mittwoch – Swim+Tennis"},
         {v:"4", label:"Donnerstag – Rad+Kraft"},
         {v:"5", label:"Freitag – Swim Key"},
-        {v:"6", label:"Samstag – Rad lang"},
+        {v:"6", label:"Samstag – Rad lang (+ optional Koppellauf)"},
         {v:"0", label:"Sonntag – Lauf+Mobility"}
       ];
       for(var i=0;i<opts.length;i++){
@@ -441,13 +836,65 @@
       var checks = getChecks(iso);
       var done = 0;
       for(var k in checks){ if(Object.prototype.hasOwnProperty.call(checks,k) && checks[k]) done++; }
-      safeText($("footerHint"), iso + " · erledigt: " + done);
+      safeText($("footerHint"), iso + " · erledigt: " + done + " · Run-Progress: " + runMinutesFor(currentDate) + " min");
+    }
+
+    function renderSwimRotationInfo(){
+      var b = getCurrentSwimBlock(currentDate);
+      var idx = swimCycleIndex(currentDate) % SWIM_TECH_BLOCKS.length;
+      var start = new Date(currentDate.getTime());
+      start.setDate(start.getDate() - (daysBetween(SWIM_ANCHOR, currentDate) % 14));
+      var end = addDays(start, 13);
+      safeText($("swimRotationInfo"),
+        "Aktuell: " + b.name + " | Drills: " + b.drills.map(function(x){return x.name;}).join(", ")
+        + " | gültig ca.: " + toISODate(start) + " bis " + toISODate(end)
+      );
+    }
+
+    function renderLibraryList(){
+      var list = $("libList");
+      var q = ($("libSearch").value || "").trim().toLowerCase();
+      list.innerHTML = "";
+
+      // Bibliothek soll ALLES zeigen: Base + dynamic (für HEUTE)
+      var LIB = LIB_FOR_DATE(currentDate);
+
+      // sort by title
+      var keys = Object.keys(LIB).sort(function(a,b){
+        return (LIB[a].title || a).localeCompare(LIB[b].title || b);
+      });
+
+      var shown = 0;
+      for(var i=0;i<keys.length;i++){
+        var k = keys[i];
+        var item = LIB[k];
+        var hay = (item.title+" "+(item.intro||"")+" "+(item.chips||[]).join(" ")).toLowerCase();
+        if(q && hay.indexOf(q) < 0) continue;
+
+        var div = document.createElement("div");
+        div.className = "libItem";
+        div.innerHTML = "<p class='name'>"+item.title+"</p>" +
+                        "<div class='meta'>"+(item.chips ? item.chips.join(" · ") : "")+"</div>";
+        div.addEventListener("click", (function(key){
+          return function(){ openModal(key, currentDate); };
+        })(k));
+        list.appendChild(div);
+        shown++;
+      }
+
+      if(shown === 0){
+        var empty = document.createElement("div");
+        empty.className = "section";
+        empty.innerHTML = "<div class='small'>Keine Treffer. Tipp: suche z.B. nach „Scull“, „Mobility“, „Run“.</div>";
+        list.appendChild(empty);
+      }
     }
 
     function render(){
       var iso = toISODate(currentDate);
       var wd = currentDate.getDay();
 
+      var PLAN = buildPlanForDate(currentDate);
       var ov = getOverride(iso);
       var plan = PLAN[wd];
       var ovText = "Override: keiner";
@@ -456,8 +903,10 @@
         plan = {
           focus:"Restday", duration:"0–30 min", load:"leicht",
           summary:"Heute kein Training. Optional Spaziergang + Mobility.",
-          details:"• Optional 20–30 min Spaziergang\n• Optional 10–15 min Mobility",
-          checklist:[{t:"Optional Spaziergang",d:"20–30 min locker."},{t:"Optional Mobility",d:"10–15 min."}]
+          details:"• Optional 20–30 min Spaziergang\n• Optional Mobility 10–15 min",
+          checklist:[
+            {t:"Optional Mobility/Reha (10–15 min)",d:"Nur wenn du steif bist.",libKey:"mobility_reha"}
+          ]
         };
         ovText = "Override: Restday";
       } else if(ov !== "" && PLAN[parseInt(ov,10)]){
@@ -488,19 +937,61 @@
         (function(i){
           var item = plan.checklist[i];
           var id = "chk_"+i;
+
           var wrap = document.createElement("div");
           wrap.className = "checkItem";
-          wrap.innerHTML =
-            "<input type='checkbox' "+(checks[id] ? "checked" : "")+" />" +
-            "<div><p class='t'>"+item.t+"</p><p class='d'>"+item.d+"</p></div>";
+
+          var cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.checked = !!checks[id];
+
+          var main = document.createElement("div");
+          main.className = "checkMain";
+
+          var title = document.createElement("p");
+          title.className = "t";
+          title.textContent = item.t;
+
+          var desc = document.createElement("p");
+          desc.className = "d";
+          desc.textContent = item.d;
+
+          var hint = document.createElement("div");
+          hint.className = "hintTap";
+          hint.textContent = item.libKey ? "Tippen für Anleitung →" : "";
+
+          main.appendChild(title);
+          main.appendChild(desc);
+          if(item.libKey) main.appendChild(hint);
+
+          wrap.appendChild(cb);
+          wrap.appendChild(main);
           list.appendChild(wrap);
 
-          var cb = wrap.querySelector("input");
           cb.addEventListener("change", function(){
             var n = getChecks(iso);
             n[id] = !!cb.checked;
             setChecks(iso, n);
+
+            // mark done lib key for progression
+            if(item.libKey){
+              markLibDone(iso, item.libKey, !!cb.checked);
+            }
+
             updateFooter();
+            // Laufprogression kann sich ändern -> Plan neu rendern (damit runMin evtl steigt)
+            // Aber nur wenn run_easy betroffen war.
+            if(item.libKey === "run_easy"){
+              renderWeekTable();
+              renderLibraryList();
+              renderSwimRotationInfo();
+              render(); // safe recursion? -> nein, weil es nochmal cb handler? Wir vermeiden Loop:
+            }
+          });
+
+          // Klick auf Text öffnet Modal
+          main.addEventListener("click", function(){
+            openModal(item.libKey, currentDate);
           });
         })(i);
       }
@@ -508,9 +999,13 @@
       $("notes").value = getNotes(iso);
       safeText($("saveHint"), storageOK ? "Bereit" : "Speichern evtl. blockiert");
       updateFooter();
+
+      // right-side helpers
+      renderSwimRotationInfo();
+      renderLibraryList();
     }
 
-    // ---------- tabs ----------
+    // tabs
     function setTab(tab){
       var tabs = document.querySelectorAll(".tab");
       for(var i=0;i<tabs.length;i++){
@@ -519,38 +1014,35 @@
       }
       $("tab-week").style.display = (tab==="week") ? "block" : "none";
       $("tab-swim").style.display = (tab==="swim") ? "block" : "none";
+      $("tab-lib").style.display  = (tab==="lib")  ? "block" : "none";
+      if(tab==="lib") renderLibraryList();
+      if(tab==="swim") renderSwimRotationInfo();
     }
     var tabEls = document.querySelectorAll(".tab");
     for(var i=0;i<tabEls.length;i++){
       (function(el){
-        el.addEventListener("click", function(){
-          setTab(el.getAttribute("data-tab"));
-        });
+        el.addEventListener("click", function(){ setTab(el.getAttribute("data-tab")); });
       })(tabEls[i]);
     }
 
-    // ---------- button bindings (explicit + safe) ----------
-    $("btnReload").addEventListener("click", function(){ location.reload(); });
+    // search
+    $("libSearch").addEventListener("input", renderLibraryList);
+    $("libClear").addEventListener("click", function(){
+      $("libSearch").value = "";
+      renderLibraryList();
+    });
 
-    $("btnToday").addEventListener("click", function(){
-      currentDate = new Date();
-      render();
-    });
-    $("btnPrev").addEventListener("click", function(){
-      currentDate = addDays(currentDate, -1);
-      render();
-    });
-    $("btnNext").addEventListener("click", function(){
-      currentDate = addDays(currentDate, 1);
-      render();
-    });
+    // bindings
+    $("btnReload").addEventListener("click", function(){ location.reload(); });
+    $("btnToday").addEventListener("click", function(){ currentDate = new Date(); renderWeekTable(); render(); });
+    $("btnPrev").addEventListener("click", function(){ currentDate = addDays(currentDate,-1); renderWeekTable(); render(); });
+    $("btnNext").addEventListener("click", function(){ currentDate = addDays(currentDate, 1); renderWeekTable(); render(); });
 
     $("btnSave").addEventListener("click", function(){
       var iso = toISODate(currentDate);
       var ok = setNotes(iso, $("notes").value);
       safeText($("saveHint"), ok ? "Gespeichert ✅" : "Speichern blockiert ❌");
     });
-
     $("btnClearNotes").addEventListener("click", function(){
       var iso = toISODate(currentDate);
       setNotes(iso, "");
@@ -559,55 +1051,44 @@
     });
 
     $("btnSetRest").addEventListener("click", function(){
-      setOverride(toISODate(currentDate), "rest");
-      render();
+      setOverride(toISODate(currentDate), "rest"); render();
     });
-
     $("btnClearOverride").addEventListener("click", function(){
-      clearOverride(toISODate(currentDate));
-      render();
+      clearOverride(toISODate(currentDate)); render();
     });
-
     $("btnApplyOverride").addEventListener("click", function(){
       var iso = toISODate(currentDate);
       var v = $("overrideSelect").value;
-      if(v === "") clearOverride(iso);
-      else setOverride(iso, v);
+      if(v === "") clearOverride(iso); else setOverride(iso, v);
       render();
     });
 
     $("btnExport").addEventListener("click", function(){
-      // Export for last 45 days
       var out = {};
       out.generated = new Date().toISOString();
-      out.note = "Triathlon Export (Notizen/Checks/Overrides)";
-
+      out.note = "Triathlon Export (Notizen/Checks/Overrides/DoneLibKeys)";
       var now = new Date();
-      for(var i=0;i<45;i++){
+      for(var i=0;i<60;i++){
         var d = addDays(now, -i);
         var diso = toISODate(d);
         out["notes_"+diso] = getNotes(diso);
         out["checks_"+diso] = getChecks(diso);
         out["override_"+diso] = getOverride(diso);
+        out["doneLib_"+diso] = getDoneLibArr(diso);
       }
-
       var blob = new Blob([JSON.stringify(out, null, 2)], {type:"application/json"});
       var url = URL.createObjectURL(blob);
       var a = document.createElement("a");
-      a.href = url;
-      a.download = "triathlon_notizen_export.json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      a.href = url; a.download = "triathlon_export.json";
+      document.body.appendChild(a); a.click(); a.remove();
       URL.revokeObjectURL(url);
     });
 
-    // ---------- init ----------
-    renderWeekTable();
+    // init
     renderOverrideSelect();
+    renderWeekTable();
     render();
   });
-
 })();
 </script>
 </body>
